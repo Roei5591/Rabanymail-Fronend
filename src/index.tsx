@@ -1,17 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ResponsiveDrawer from './components/ResponsiveDrawer';
+import Drawer from '@material-ui/core/Drawer';
+import { Divider, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+
+const App = () => {
+
+  return (
+      <div>
+ <ResponsiveDrawer />
+
+  
+
+      </div>
+  );
+};
+
+ReactDOM.render(<App />, document.querySelector('#root'));
+
+
