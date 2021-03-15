@@ -1,18 +1,19 @@
-import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import CommentIcon from "@material-ui/icons/Comment";
+import React, { useEffect, useState } from 'react';
+import { Checkbox, IconButton } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import RedoIcon from '@material-ui/icons/Redo';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import KeyboardIcon from '@material-ui/icons/Keyboard';
+import SettingsIcon from '@material-ui/icons/Settings';
+import './MailList.css';
+import MailListItem from './MailListItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-
     backgroundColor: theme.palette.background.paper
   }
 }));
@@ -20,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 export default function MailList() {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
+
+  const [mailList, setMailList] = React.useState<any[]>([]);
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -34,32 +37,67 @@ export default function MailList() {
     setChecked(newChecked);
   };
 
-  return (
-    <List className={classes.root}>
-      {[0, 1, 2, 3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13 ,14 ,15, 16 ,17 , 18 , 19 ].map((value) => {
-        const labelId = `checkbox-list-label-${value}`;
+  useEffect(() => {
+    fetch("http://localhost:7777/messages/inbox/")
+    .then(response => response.json())
+    .then(data => {setMailList([...data , ...data , ...data , ...data])});
+   // console.log(mailList[0]);
+}, []);
 
-        return (
-          <ListItem key={value} role={undefined} button  disableRipple>
-            <ListItemIcon>
-              <Checkbox
-              onClick={handleToggle(value)}
-                edge="start"
-                checked={checked.indexOf(value) !== -1}
-                tabIndex={-1}
-                disableRipple
-                inputProps={{ "aria-labelledby": labelId }}
-              />
-            </ListItemIcon>
-            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="comments">
-                <CommentIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        );
-      })}
-    </List>
-  );
+  const mailList2 = [{
+    id: 1,
+    to: "test",
+    title: "test",
+    subject: "test",
+    message: "test",
+    time: "test"
+} , {
+  id: 2,
+  to: "test",
+  title: "test",
+  subject: "test",
+  message: "test",
+  time: "test"
+}]
+
+  return (
+    <div className="emailList">
+        <div className="emailList_settings">
+            <div className="emailList_settingsLeft">
+                <Checkbox />
+                <IconButton>
+                    <ArrowDropDownIcon />
+                </IconButton>
+                <IconButton>
+                    <RedoIcon />
+                </IconButton>
+                <IconButton>
+                    <MoreVertIcon />
+                </IconButton>
+            </div>
+            <div className="emailList_settingsRight">
+                <IconButton>
+                    <ChevronLeftIcon />
+                </IconButton>
+                <IconButton>
+                    <ChevronRightIcon />
+                </IconButton>
+                <IconButton>
+                    <KeyboardIcon />
+                </IconButton>
+                <IconButton>
+                    <SettingsIcon />
+                </IconButton>
+            </div>
+        </div>
+
+        <div className="emailList_sections">
+        </div>
+        <div className="emailList_list">
+            {mailList.map(mail => (
+                <MailListItem key={mail.id} id={mail.id} title={mail.from} subject={mail.subject} description={mail.text} time={mail?.created} />
+            ))}
+        </div>
+    </div>
+);
 }
