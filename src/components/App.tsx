@@ -1,10 +1,12 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
 import makeStyles from './styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "./MyAppBar";
 import MailList from "./MailList";
 import SideMenu from "./SideMenu";
+import Mail from "./Mail";
 
 const drawerWidth = 200;
 
@@ -89,19 +91,30 @@ const App = () => {
 
 
   return (
+    <Router>
     <div className={classes.root}>
+       
       <CssBaseline />
-     
-      <AppBar open={open}/> 
 
-    <SideMenu open={open} toggleDrawer={toggleDrawer}/>
+      <AppBar open={open}/>
+
+      <SideMenu open={open} toggleDrawer={toggleDrawer}/>
       
       <main className={classes.content}>
         <div className={classes.toolbar}/>
-          <MailList/>
+        <Switch>
+        <Route path="/inbox" exact>
+        <MailList/>
+        </Route>
+        <Route path="/inbox/:mailID" component={Mail}>
+        </Route>
+
+        </Switch>
 
       </main>
+    
     </div>
+    </Router>
   );
 }
 

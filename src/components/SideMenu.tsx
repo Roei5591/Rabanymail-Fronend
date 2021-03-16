@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
+import { Link } from 'react-router-dom';
 import makeStyles from './styles';
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -48,14 +49,17 @@ const SideMenu = ({open , toggleDrawer} : {open: boolean , toggleDrawer: () => v
         <Divider />
         <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            <Link to={'/' + text} style={{ textDecoration: 'none' , color: "inherit" }}>
             <ListItem button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
+            </Link>
           ))}
         </List>
+
         <Divider />
         <List>
           {["All mail", "Trash", "Spam"].map((text, index) => (
