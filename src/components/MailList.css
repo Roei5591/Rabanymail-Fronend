@@ -1,13 +1,22 @@
 .emailList {
   flex: 1;
+  position: relative;
+}
+
+.emailList_list {
+  margin-top: 50px;
 }
 
 .emailList_settings {
   display: flex;
+  position: fixed;
+  margin-top: -50px;
   justify-content: space-between;
-  border-bottom: 1px solid whitesmoke;
+
   z-index: 999;
   padding-right: 10px;
+  background-color: white;
+  width: 100%;
 }
 
 .emailList_sections {

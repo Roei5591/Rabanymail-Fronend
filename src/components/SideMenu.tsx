@@ -49,7 +49,7 @@ const SideMenu = ({open , toggleDrawer} : {open: boolean , toggleDrawer: () => v
         <Divider />
         <List>
           {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <Link to={'/' + text} style={{ textDecoration: 'none' , color: "inherit" }}>
+            <Link to={'/' + text} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
             <ListItem button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

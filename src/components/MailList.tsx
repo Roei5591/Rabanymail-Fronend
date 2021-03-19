@@ -10,7 +10,7 @@ import KeyboardIcon from '@material-ui/icons/Keyboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import './MailList.css';
 import MailListItem from './MailListItem';
-import { Link } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +41,7 @@ export default function MailList() {
   useEffect(() => {
     fetch("http://localhost:7777/messages/inbox/")
     .then(response => response.json())
-    .then(data => {setMailList([...data , ...data , ...data , ...data])});
+    .then(data => {setMailList([...data])});
     
 }, []);
 
@@ -77,13 +77,11 @@ export default function MailList() {
             </div>
         </div>
 
-        <div className="emailList_sections">
-        </div>
         <div className="emailList_list">
             {mailList.map(mail => (
-                <Link to={`/inbox/${mail._id}`} style={{ textDecoration: 'none' , color: "inherit" }}>
+                
                 <MailListItem key={mail._id} mail={mail} />
-                </Link>
+              
             ))}
         </div>
     </div>

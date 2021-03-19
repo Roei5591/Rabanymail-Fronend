@@ -4,6 +4,7 @@ import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
 import LabelImportantOutlinedIcon from '@material-ui/icons/LabelImportantOutlined';
 import './MailListItem.css';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 
 function MailListItem({mail}: any){
@@ -19,11 +20,14 @@ function MailListItem({mail}: any){
                 <LabelImportantOutlinedIcon />
             </IconButton>
         </div>
-
-        <h3 className="emailRow_title">
+        
+        
+        <Link className="clickable" to={'/'} style={{ textDecoration: 'none' , color: "inherit" }}>
+        <div className="emailRow_title">
+        <h3>
             {mail.from}
         </h3>
-
+        </div>
         <div className="emailRow_message">
             <h4>
                 {mail.subject}
@@ -36,6 +40,9 @@ function MailListItem({mail}: any){
         <div className="emailRow_time">
             {moment(mail.created).format('MM/DD/YYYY')}
         </div>
+        </Link>
+       
+       
     </div>
 )
 }
