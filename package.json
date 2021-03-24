@@ -3,21 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.0.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "@shhhplus/react-router-relative-link": "^0.1.9",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.0",
+    "@types/ckeditor": "^4.9.10",
     "@types/jest": "^26.0.20",
     "@types/node": "^12.20.4",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "axios": "^0.21.1",
+    "html-to-text": "^7.0.0",
+    "immer": "^8.0.3",
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-froala-wysiwyg": "^3.2.6-1",
+    "react-hook-form": "^6.15.5",
+    "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
+    "react-router-relative-link": "^4.0.2",
     "react-scripts": "4.0.3",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
     "typescript": "^4.2.2",
     "web-vitals": "^1.1.0"
   },
@@ -46,6 +58,8 @@
     ]
   },
   "devDependencies": {
+    "@types/html-to-text": "^6.0.0",
+    "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7"
   }
 }

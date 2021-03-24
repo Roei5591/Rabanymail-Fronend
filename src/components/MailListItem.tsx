@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Checkbox, IconButton } from '@material-ui/core';
-import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined';
+import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
+import StarRoundedIcon from '@material-ui/icons/StarRounded';
 import LabelImportantOutlinedIcon from '@material-ui/icons/LabelImportantOutlined';
 import './MailListItem.css';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link ,useLocation } from 'react-router-dom';
+import { useActions } from "../hooks/use-actions";
 
 
 function MailListItem({mail}: any){
+
+    const location = useLocation();
+    const {toggleStar} = useActions();
+    
+
+    const handleClickStar = () => {
+        toggleStar(mail._id);
+    }
 
   return (
     <div className="emailRow">
         <div className="emailRow_options">
             <Checkbox />
-            <IconButton>
-                <StarBorderOutlinedIcon />
+            <IconButton onClick = {handleClickStar}>
+                { mail.isStarred 
+                ? <StarRoundedIcon fontSize = "large"/>
+                : <StarBorderRoundedIcon fontSize = "large"/>}
             </IconButton>
             <IconButton>
                 <LabelImportantOutlinedIcon />
@@ -22,7 +34,7 @@ function MailListItem({mail}: any){
         </div>
         
         
-        <Link className="clickable" to={'/'} style={{ textDecoration: 'none' , color: "inherit" }}>
+       <Link className="clickable" to={`${location}/${mail._id}`} style={{ textDecoration: 'none' , color: "inherit" }}>
         <div className="emailRow_title">
         <h3>
             {mail.from}
@@ -38,7 +50,7 @@ function MailListItem({mail}: any){
         </div>
 
         <div className="emailRow_time">
-            {moment(mail.created).format('MM/DD/YYYY')}
+          <h4>  {moment(mail.created).format('MM/DD/YYYY')}</h4>
         </div>
         </Link>
        

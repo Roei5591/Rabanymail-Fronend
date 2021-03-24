@@ -10,6 +10,11 @@ import KeyboardIcon from '@material-ui/icons/Keyboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import './MailList.css';
 import MailListItem from './MailListItem';
+import { useLocation } from "react-router-dom";
+
+import Axios from 'axios';
+import { useActions } from "../hooks/use-actions";
+import { useTypedSelector } from "../hooks/use-typed-selector";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MailList() {
+export default function MailList( { mailList } :any) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
 
-  const [mailList, setMailList] = React.useState<any[]>([]);
+
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -38,12 +43,15 @@ export default function MailList() {
     setChecked(newChecked);
   };
 
+
+  const {fetchInbox} = useActions();
   useEffect(() => {
-    fetch("http://localhost:7777/messages/inbox/")
-    .then(response => response.json())
-    .then(data => {setMailList([...data])});
-    
-}, []);
+    fetchInbox();
+},[] );
+
+
+
+
 
 
   return (
@@ -78,7 +86,7 @@ export default function MailList() {
         </div>
 
         <div className="emailList_list">
-            {mailList.map(mail => (
+            {mailList.map( (mail:any) => (
                 
                 <MailListItem key={mail._id} mail={mail} />
               

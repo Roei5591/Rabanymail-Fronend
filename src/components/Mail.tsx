@@ -1,101 +1,137 @@
-import React, { useEffect } from 'react';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MoveToInboxIcon from '@material-ui/icons/MoveToInbox';
-import ErrorIcon from '@material-ui/icons/Error';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EmailIcon from '@material-ui/icons/Email';
-import WatchLaterIcon from '@material-ui/icons/WatchLater';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { IconButton } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import PrintIcon from '@material-ui/icons/Print';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import './Mail.css';
-import moment from 'moment';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
+import makeStyles from './styles';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "./MyAppBar";
+import MailList from "./MailList";
+import SideMenu from "./SideMenu";
+import MailPage from "./MailPage";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import ComposeMail from "./ComposeMail";
+import { stat } from "node:fs";
+
+const drawerWidth = 200;
+
+const useStyles2 = makeStyles2((theme) => {
+  const drawerWithClose = theme.spacing(7) + 1;
+
+  return {
+    root: {
+      display: "flex"
+    },
+    appBar: {
+      
+      width: `calc(100% - ${drawerWithClose}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
+    },
+    appBarShift: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+    menuButton: {
+      marginRight: 36
+    },
+    hide: {
+      display: "none"
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: "nowrap"
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+
+    drawerClose: {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      }),
+      overflowX: "hidden",
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up("sm")]: {
+        width: drawerWithClose
+      }
+    },
+    toolbar: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3)
+    }
+  };
+});
+
+const useStyles = makeStyles();
+
+const App = () => {
+  const classes = useStyles();
+  const theme = useTheme();
+
+  const {inbox ,starred, composeMail} = useTypedSelector((state) => {
+    const inbox = state.mail?.mail || [];
+    const starred = inbox.filter(mail => mail.isStarred)
+    const composeMail = state.control?.composeMailOpen;
+    return {inbox , starred ,composeMail};
+  }) || {inbox: [] , starred : []};
+
+  
+
+  const [open, setOpen] = React.useState(true);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
 
 
-function Mail( { match} : any){
-    console.log(match.params)
-    const history = useHistory();
+  return (
+   
+    <div className={classes.root}>
+       
+      <CssBaseline />
 
-    const [mail, setMail] = React.useState<any>({});
+      <AppBar/>
 
-    useEffect(() => {
-        fetch("http://localhost:7777/messages/inbox/")
-        .then(response => response.json())
-        .then(data => {setMail(data.find((m:any) => m.id === match.params.id))});
-    }, []);
-
-    return (
-        <div className="mail">
-            <div className="mail_tools">
-                <div className="mail_toolsLeft">
-                    <IconButton>
-                        <ArrowBackIcon onClick = {() => history.push("/inbox")} />
-                    </IconButton>
-                    
-                    <IconButton>
-                        <MoveToInboxIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <ErrorIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <EmailIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <WatchLaterIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <CheckCircleIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <LabelImportantIcon />
-                    </IconButton>
-
-                    <IconButton>
-                        <MoreVertIcon />
-                    </IconButton>
-                </div>
-
-                <div className="mail_toolsRight">
-                    <IconButton>
-                        <UnfoldMoreIcon />
-                    </IconButton>
-                    <IconButton>
-                        <PrintIcon />
-                    </IconButton>
-                    <IconButton>
-                        <ExitToAppIcon />
-                    </IconButton>
-                </div>
-            </div>
-            <div className="mail_body">
-                <div className="mail_bodyHeader">
-                    <h2>{mail.subject}</h2> 
-                    <LabelImportantIcon className="mail_important" />
-                    <p>{mail.from}</p>
-                    <p className="mail_time">{moment(mail.created).format('MM/DD/YYYY')}</p>
-                </div>
-
-                <div className="mail_message">
-                    <p>{mail.text}</p>
-                </div>
-            </div>
-        </div>
-    )
+      <SideMenu/>
+      
+      <main className={classes.content}>
+        <div className={classes.toolbar}/>
+        <Switch>
+        <Route path="/mail/inbox" exact>
+        <MailList mailList = {inbox}/>
+        </Route>
+        <Route path="/mail/starred" exact>
+        <MailList mailList = {starred}/>
+        </Route>
+        <Route path="/mail/:location/:mailID"  component={MailPage}>
+        </Route>
+        
+        </Switch>
+        {composeMail &&<ComposeMail/>}
+      </main>
+    
+    </div>
+    
+  );
 }
 
-export default Mail;
+export default App;

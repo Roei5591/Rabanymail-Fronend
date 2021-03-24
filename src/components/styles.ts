@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { findByLabelText } from "@testing-library/dom";
 
 const drawerWidth = 200;
 
@@ -10,7 +11,7 @@ export default () => makeStyles((theme) => {
       display: "flex"
     },
     appBar: {
-      
+      display: "flex",
       width: `calc(100% - ${drawerWithClose}px)`,
       transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
@@ -66,6 +67,30 @@ export default () => makeStyles((theme) => {
     content: {
       flexGrow: 1,
       padding: theme.spacing(3)
-    }
+    },
+    AppBarRight: {
+      marginLeft: 10
+    },
+    AppbBarMiddle: {
+      flex: 1,  
+      display: "flex",
+      alignItems: "center",
+      
+    },
+  search:{
+    display: "flex",
+    flex: 1,
+    marginLeft: 20,
+    maxWidth: 600,
+    minWidth: 200
+  },
+   input: {
+    marginLeft: theme.spacing(1),
+    //maxWidth: 200,
+    width: "100%"
+  },
+  iconButton: {
+    padding: 10
+  },
   };
 });

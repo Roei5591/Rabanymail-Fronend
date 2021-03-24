@@ -14,6 +14,7 @@ import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 import Axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useActions } from '../hooks/use-actions';
 
 function Copyright() {
   return (
@@ -48,30 +49,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = ({getUser }: any) => {
+const SignIn = () => {
   const classes = useStyles();
-
+  const {login} = useActions();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   
-
-  const login = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const signInOnServer = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    Axios({
-      method: "POST",
-      data: {
-        username: loginUsername,
-        password: loginPassword,
-      },
-      withCredentials: true,
-      url: "http://localhost:7777/login",
-    }).then((res) => {
-     getUser();
-    }).catch((error) => {
-      console.error(error);
-    });
-  };
+    login(loginUsername , loginPassword)
+  }
+
+
 
 
 
@@ -122,7 +112,7 @@ const SignIn = ({getUser }: any) => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick = {login}
+            onClick = {signInOnServer}
           >
             Sign In
           </Button>
