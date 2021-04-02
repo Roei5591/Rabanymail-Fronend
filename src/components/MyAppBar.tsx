@@ -19,11 +19,16 @@ export default function MyAppBar() {
 
   const {logout} = useActions();
 
-  const { username , firstChar ,open}  = useTypedSelector((state) => {
-    const username = state.user?.username || "";
-    const firstChar = state.user?.firstChar || ""; 
-    const open = state.control?.sideBarOpen;
-    return  { username , firstChar ,open} 
+  const username  = useTypedSelector((state) => {
+    return state.user?.username;
+  });
+
+  const  firstChar = useTypedSelector((state) => {
+    return state.user?.firstChar;     
+  });
+
+  const open = useTypedSelector((state) => {
+    return state.control?.sideBarOpen;
   });
 
   const classes = useStyles();

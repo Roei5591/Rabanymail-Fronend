@@ -10,11 +10,12 @@ import KeyboardIcon from '@material-ui/icons/Keyboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import './MailList.css';
 import MailListItem from './MailListItem';
-import { useLocation } from "react-router-dom";
+
 
 import Axios from 'axios';
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
+import { ContactlessOutlined } from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,10 +25,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MailList( { mailList } :any) {
+export default function MailList( { type , location} :any) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([0]);
 
+  const mailList = useTypedSelector((state) => {
+    console.log("fs")
+    if(type === "inbox") return state.mail?.mail.filter(mail => !mail.isOutbound && !mail.isTrash).reverse();
+    if(type === "starred") return state.mail?.mail.filter(mail => mail.isStarred && !mail.isTrash).reverse();
+    if(type === "sent") return state.mail?.mail.filter(mail => mail.isOutbound && !mail.isTrash).reverse();
+    if(type === "allmail") return state.mail?.mail.filter(mail => !mail.isTrash).reverse();
+    if(type === "trash"){
+      console.log(state.mail?.mail.filter(mail => mail.isTrash).reverse())
+      return state.mail?.mail.filter(mail => mail.isTrash).reverse();
+    }
+    return [];
+  }) || [];
 
 
   const handleToggle = (value: number) => () => {
@@ -43,10 +56,14 @@ export default function MailList( { mailList } :any) {
     setChecked(newChecked);
   };
 
+ 
 
-  const {fetchInbox} = useActions();
+  const {setLocation ,fetchAllMail} = useActions();
   useEffect(() => {
-    fetchInbox();
+    setLocation(type);
+    if(type === "inbox" || type === "trash")
+    fetchAllMail();
+    
 },[] );
 
 
@@ -88,7 +105,7 @@ export default function MailList( { mailList } :any) {
         <div className="emailList_list">
             {mailList.map( (mail:any) => (
                 
-                <MailListItem key={mail._id} mail={mail} />
+                <MailListItem key={mail._id} mail={mail} location={location}/>
               
             ))}
         </div>

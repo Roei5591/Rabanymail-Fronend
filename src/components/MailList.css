@@ -4,17 +4,17 @@
 }
 
 .emailList_list {
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .emailList_settings {
   display: flex;
   position: fixed;
-  margin-top: -50px;
+  margin-top: -60px;
   justify-content: space-between;
-
-  z-index: 999;
+  z-index: 10;
   padding-right: 10px;
+  padding-top: 10px;
   background-color: white;
   width: 100%;
 }
@@ -23,5 +23,4 @@
   display: flex;
   border-bottom: 1px solid whitesmoke;
   background-color: white;
-  z-index: 999;
 }

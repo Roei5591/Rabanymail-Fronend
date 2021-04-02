@@ -9,5 +9,6 @@ export interface Mail {
   text: string,
   html: string,
   created: string,
-
+  isRead: boolean,
+  isTrash: boolean,
 }

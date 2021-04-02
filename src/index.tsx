@@ -1,3 +1,5 @@
+import './wdyr';
+
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
@@ -10,14 +12,12 @@ import { Provider } from 'react-redux';
 
 const T  = () => {
   
- 
-  
   return (
     
   <Provider store={store}>
-  <Router>
-  <App/>
-  </Router>
+  < Router>
+     <App/>
+   </Router>
   </Provider>);
 
 }

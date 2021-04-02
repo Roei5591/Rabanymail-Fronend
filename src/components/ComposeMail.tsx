@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './ComposeMail.css';
 import CloseIcon from '@material-ui/icons/Close';
 import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { sendEmail } from '../helpers/messages';
 //import { closeSendMessage } from './features/mailSlice';
 
 import 'froala-editor/css/froala_style.min.css';
@@ -13,31 +12,37 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 
 import FroalaEditor from 'react-froala-wysiwyg';
 import { useActions } from '../hooks/use-actions';
-import {htmlToText} from 'html-to-text';
+import { ContactsOutlined } from '@material-ui/icons';
+
+
 
 const ComposeMail = () => {
     const { register, handleSubmit, watch, errors } = useForm();
 
-    const [html, setHtml] = React.useState([0]);
+    const [html1, setHtml1] = React.useState("");
+    const html = useRef('');
+    const {closeComposeMail} = useActions();
+    
+    
+    
+    const {sendMail} = useActions();
+    
+
 
     const onSubmit = (data:any) => {
-       console.log(data);
-       data = {
-            ...data,
-            html,
-            text: htmlToText(data)
-       }
-       console.log(data);
-       sendEmail(data);
-       if(!errors.to)
-       closeComposeMail();
+       data.to = [data.to];
+       data.html = html.current;
+       sendMail(data);
+     
+       //closeComposeMail();
     };
 
     const onC = (data:any) => {
-      setHtml(data);   
+      html.current = data;
+     // setHtml1(data); 
    };
 
-   const {closeComposeMail} = useActions();
+   
 
   
 

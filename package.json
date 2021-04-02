@@ -5,6 +5,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^27.0.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@craco/craco": "^6.1.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@shhhplus/react-router-relative-link": "^0.1.9",
@@ -16,6 +17,7 @@
     "@types/node": "^12.20.4",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
+    "@welldone-software/why-did-you-render": "^6.1.1",
     "axios": "^0.21.1",
     "html-to-text": "^7.0.0",
     "immer": "^8.0.3",

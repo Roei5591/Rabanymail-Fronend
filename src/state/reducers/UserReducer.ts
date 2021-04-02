@@ -11,7 +11,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  loading: false,
+  loading: true,
   fail: false,
   error: null,
   username: "",
@@ -42,6 +42,8 @@ const reducer = produce((state: UserState = initialState, action: Action) => {
       state.error = action.payload;
       return
 
+
+      //may be useless
     case ActionType.GET_USER:
       state.loading = true;
       return
@@ -58,23 +60,21 @@ const reducer = produce((state: UserState = initialState, action: Action) => {
       state.error = action.payload;
       return  
       
-      case ActionType.LOGOUT:
-        state.loading = true;
-        return
+    case ActionType.LOGOUT:
+      state.loading = true;
+      return
     
-      case ActionType.LOGOUT_COMPLETE:
-        state.loading = false;
-        state.username = "";
-        state.firstChar = "";
-
-        return
+    case ActionType.LOGOUT_COMPLETE:
+      state.loading = false;
+      state.username = "";
+      state.firstChar = "";
+      return
     
-      case ActionType.LOGOUT_ERROR:
-        state.loading = false;
-        state.error = action.payload;
-        return  
+    case ActionType.LOGOUT_ERROR:
+      state.loading = false;
+      state.error = action.payload;
+      return  
   
-    
     default:
       return state;
   }

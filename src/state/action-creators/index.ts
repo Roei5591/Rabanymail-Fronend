@@ -1,13 +1,20 @@
 import { Dispatch } from 'redux';
-import { fetchInboxFromServer, toggleStarOnServer } from '../../helpers/messages';
+import { fetchInboxFromServer, markAsReadOnServer, toggleStarOnServer , sendMailFromServer , fetchAllMailFromServer, toggleIsTrashOnServer, deleteMailOnServer} from '../../helpers/messages';
 import { loginSever, logoutServer , getUserFromServer } from '../../helpers/user';
 import { ActionType } from '../action-types';
 import {
-  Action, closeComposeMailAction, openComposeMailAction, toggleSidebarAction,
+  Action, closeComposeMailAction, openComposeMailAction, setLocationAction, toggleSidebarAction,
 } from '../actions';
 import { Mail } from '../Mail';
 
 import { RootState } from '../reducers';
+
+export const setLocation = (location: string): setLocationAction => {
+  return {
+    type: ActionType.SET_LOCATION,
+    payload: location
+  };
+};
 
 export const toggleSideBar = (): toggleSidebarAction => {
   return {
@@ -131,20 +138,133 @@ export const fetchInbox = () =>
   };
 }
 
+export const fetchAllMail = () =>
+{
+  return async (dispatch: Dispatch<Action> , getState: () => RootState) => {
+
+    dispatch({type: ActionType.FETCH_ALL_MAIL});
+    const mailSize = getState().mail?.mail.length || 0;
+  
+    try {
+      const {allMail , needToUpdate}  = (await fetchAllMailFromServer(mailSize)).data;
+     
+      
+      if(needToUpdate)
+      dispatch({
+        type: ActionType.FETCH_ALL_MAIL_COMPLETE,
+        payload: allMail
+      });
+     
+    
+    } catch (err) {
+      dispatch({
+        type: ActionType.FETCH_ALL_MAIL_ERROR,
+        payload: err.message
+      });
+    }
+  };
+}
+
 export const toggleStar = (mailId : string) =>
 {
   return async (dispatch: Dispatch<Action>) => {
-
     dispatch({type: ActionType.TOGGLE_STAR , payload: mailId});
+    try {
+      const res = await toggleStarOnServer(mailId);
+      
+      
+    
+    } catch (err) {
+      
+      dispatch({
+        type: ActionType.TOGGLE_STAR_ERROR,
+        payload: err.message
+      });
+    }
+  };
+}
+
+export const sendMail = (msg: {
+  to: string[],
+  subject: string,
+  html: string
+  text: string | undefined
+}) =>
+{
+  return async (dispatch: Dispatch<Action>) => {
+
+    dispatch({type: ActionType.SEND_MAIL });
     
     try {
-      await toggleStarOnServer(mailId);
-      
+      const res = (await sendMailFromServer(msg)).data as Mail;
+      console.log(res);
+      dispatch({type: ActionType.SEND_MAIL_COMPLETE , payload: res });
     
     } catch (err) {
       console.log("star error: " + err.message)
       dispatch({
-        type: ActionType.TOGGLE_STAR_ERROR,
+        type: ActionType.SEND_MAIL_ERROR,
+        payload: err.message
+      });
+    }
+  };
+}
+
+export const markAsRead = (mailId : string[] , isRead : boolean) =>
+{
+
+  return async (dispatch: Dispatch<Action>) => {
+    
+    try {
+     
+      await markAsReadOnServer(mailId , isRead);
+
+      dispatch({type: ActionType.MARK_AS_READ , payload:{ mailId , isRead }});
+    
+    } catch (err) {
+      
+      dispatch({
+        type: ActionType.MARK_AS_READ_ERROR,
+        payload: err.message
+      });
+    }
+  };
+}
+
+export const toggleIsTrash = (mailId : string[]) =>
+{
+  return async (dispatch: Dispatch<Action>) => {
+    
+    dispatch({type: ActionType.TOGGLE_IS_TRASH , payload: mailId});
+    try {
+      const res = await toggleIsTrashOnServer(mailId);
+      
+      
+    
+    } catch (err) {
+      
+      dispatch({
+        type: ActionType.TOGGLE_IS_TRASH_ERROR,
+        payload: err.message
+      });
+    }
+  };
+}
+
+export const deleteMail = (mailId : string[]) =>
+{
+  return async (dispatch: Dispatch<Action>) => {
+    
+   
+    try {
+       await deleteMailOnServer(mailId);
+       dispatch({type: ActionType.DELETE_MAIL , payload: mailId});
+      
+    
+    } catch (err) {
+      
+      dispatch({
+        type: ActionType.DELETE_MAIL_ERROR,
         payload: err.message
       });
     }

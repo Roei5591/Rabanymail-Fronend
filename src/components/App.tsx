@@ -6,30 +6,56 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector';
+import React from 'react';
 
+const PureMail = React.memo(Mail);
 
 const App  = () => {
   
-  const [data, setData] = useState<any>({ username: "" , loading: false});
-  const {getUser} = useActions();
-  const {username , loading} = useTypedSelector((state) => {
-    return { username: state.user?.username , loading: state.user?.loading};
+  const {getUser , fetchAllMail} = useActions();
+  
+
+
+
+
+  const username  = useTypedSelector((state) => {
+   // console.log("ERROR: " + state.user?.username );
+    return state.user?.username 
+  });
+
+  const loading = useTypedSelector((state) => {
+    return  state.user?.loading
+  });
+
+  const error = useTypedSelector((state) => {
+    
+    return  state.mail?.error
   });
 
 
- 
+
   
   useEffect(() => {
+    if(username) 
+    fetchAllMail();
+
+    console.log("here " + username);
+  },[username]);
+
+  useEffect(() => {
     getUser();
+  
   },[]);
+  
 
-  //useEffect(() => {
-    //setData({username , loading});
-    //console.log(username , loading);
-  //},[username, loading]);
 
-  if(loading) return <h1>Loading...</h1>
-  else if (!username ) return (
+  if(loading) {
+  
+    return <h1>Loading...</h1>
+  }
+  else if (!username ) {
+    console.log("!username");
+    return (
     <div>
     <Redirect to="/login"/>
     <Route path="/login">
@@ -41,15 +67,13 @@ const App  = () => {
   </Route>
   </div>
   )
+  }
+
   
   return (
     <div>
       
       <Switch>
-
-      <Route path="/loading">
-        <h1>Loading...</h1>
-      </Route>
 
       <Route path="/Mail">
         <Mail/>
@@ -63,9 +87,6 @@ const App  = () => {
         <SignUp />
       </Route>
      
-
-
-
       </Switch>
       </div>
   )

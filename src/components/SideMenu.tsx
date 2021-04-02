@@ -24,14 +24,13 @@ const SideMenu = () => {
   
   const classes = useStyles();
   const theme = useTheme();
-  const {openComposeMail ,toggleSideBar} = useActions();
-  const open = useTypedSelector((state) => {
-    return state.control?.sideBarOpen 
-  });
 
+  const {openComposeMail ,toggleSideBar ,setLocation} = useActions();
+  
+  const open = useTypedSelector(state => state.control?.sideBarOpen); 
 
+  const location = useTypedSelector(state => state.control?.location); 
 
- 
 
   return (
     <div>
@@ -59,9 +58,13 @@ const SideMenu = () => {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <Link to={'/Mail/' + text} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
-            <ListItem button key={text}>
+          {["Inbox", "Starred", "Sent" , "All mail" , "trash"].map((text, index) => (
+            <Link to={'/mail/' + text.toLocaleLowerCase().replaceAll( ' ', '')} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
+            <ListItem 
+            button key={text} 
+            className={clsx({[classes.loc]: text.toLocaleLowerCase().replaceAll( ' ', '') === location})}
+            onClick= {() => { setLocation(text.toLocaleLowerCase().replaceAll( ' ', ''))}}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -73,7 +76,7 @@ const SideMenu = () => {
 
         <Divider />
         <List>
-          {["All mail", "Trash"].map((text, index) => (
+          {[ ].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -81,7 +84,7 @@ const SideMenu = () => {
               <ListItemText primary={text} />
             </ListItem>
           ))}
-
+              <ListItem ></ListItem> 
             <ListItem button key={"compose"} onClick={openComposeMail}>
               <ListItemIcon>
                <InboxIcon /> 

@@ -1,5 +1,5 @@
 import { ActionType } from '../action-types';
-import { Mail,  } from '../Mail';
+import { Mail  } from '../Mail';
 
 export interface  toggleSidebarAction {
   type: ActionType.TOGGLE_SIDEBAR;
@@ -72,6 +72,20 @@ export interface  fetchInboxErrorAction {
   payload: string;
 }
 
+export interface fetchAllMailAction {
+  type: ActionType.FETCH_ALL_MAIL;
+}
+
+export interface fetchAllMailCompleteAction {
+  type: ActionType.FETCH_ALL_MAIL_COMPLETE;
+  payload: Mail[];
+}
+
+export interface  fetchAllMailErrorAction {
+  type: ActionType.FETCH_ALL_MAIL_ERROR;
+  payload: string;
+}
+
 export interface toggleStarAction {
   type: ActionType.TOGGLE_STAR;
   payload: string;
@@ -83,7 +97,59 @@ export interface  toggleStarErrorAction {
 }
 
 
+export interface sendMailAction {
+  type: ActionType.SEND_MAIL;
+}
 
+export interface  sendMailCompleteAction {
+  type: ActionType.SEND_MAIL_COMPLETE;
+  payload: Mail;
+}
+
+export interface  sendMailErrorAction {
+  type: ActionType.SEND_MAIL_ERROR;
+  payload: string;
+}
+
+export interface setLocationAction {
+  type: ActionType.SET_LOCATION;
+  payload: string;
+}
+
+export interface markAsReadAction {
+  type: ActionType.MARK_AS_READ;
+  payload: {
+    mailId: string[],
+    isRead: boolean
+  };
+}
+
+
+export interface markAsReadErrorAction {
+  type: ActionType.MARK_AS_READ_ERROR;
+  payload: string,
+
+}
+
+export interface toggleIsTrashAction {
+  type: ActionType.TOGGLE_IS_TRASH;
+  payload: string[];
+}
+
+export interface  toggleIsTrashErrorAction {
+  type: ActionType.TOGGLE_IS_TRASH_ERROR;
+  payload: string;
+}
+
+export interface deleteMailAction {
+  type: ActionType.DELETE_MAIL;
+  payload: string[];
+}
+
+export interface  deleteMailErrorAction {
+  type: ActionType.DELETE_MAIL_ERROR;
+  payload: string;
+}
 
 
 
@@ -102,8 +168,21 @@ export type Action =
   | fetchInboxAction
   | fetchInboxCompleteAction
   | fetchInboxErrorAction
+  | fetchAllMailAction
+  | fetchAllMailCompleteAction
+  | fetchAllMailErrorAction
   | toggleStarAction
   | toggleStarErrorAction
   | toggleSidebarAction
   | openComposeMailAction
-  | closeComposeMailAction;
+  | closeComposeMailAction
+  | setLocationAction
+  | sendMailAction
+  | sendMailCompleteAction
+  | sendMailErrorAction
+  | markAsReadAction
+  | markAsReadErrorAction
+  | toggleIsTrashAction
+  | toggleIsTrashErrorAction
+  | deleteMailAction
+  | deleteMailErrorAction;

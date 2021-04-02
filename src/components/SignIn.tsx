@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = () => {
   const classes = useStyles();
-  const {login} = useActions();
+  const {login , logout} = useActions();
 
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -59,6 +59,11 @@ const SignIn = () => {
   const signInOnServer = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     login(loginUsername , loginPassword)
+
+    window.addEventListener('beforeunload', function (e) {
+      //e.preventDefault();
+     // logout();
+  });
   }
 
 

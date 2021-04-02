@@ -66,7 +66,8 @@ export default () => makeStyles((theme) => {
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3)
+      paddingTop: theme.spacing(3),
+      paddingLeft: theme.spacing(1)
     },
     AppBarRight: {
       marginLeft: 10
@@ -92,5 +93,8 @@ export default () => makeStyles((theme) => {
   iconButton: {
     padding: 10
   },
+  loc:{
+    backgroundColor: "rgba(0, 0, 0, 0.1) !important"
+  }
   };
 });

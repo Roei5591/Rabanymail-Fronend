@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
 import makeStyles from './styles';
@@ -10,6 +10,7 @@ import MailPage from "./MailPage";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import ComposeMail from "./ComposeMail";
 import { stat } from "node:fs";
+import { useActions } from "../hooks/use-actions";
 
 const drawerWidth = 200;
 
@@ -81,26 +82,56 @@ const useStyles2 = makeStyles2((theme) => {
   };
 });
 
+const List = () => {
+  
+  const composeMail = useTypedSelector(state =>  state.control?.composeMailOpen);
+
+
+  return <div>        
+    
+  <Route path="/mail/inbox" exact>
+  <PureMailList type = {"inbox"} location={"inbox"}/>
+  </Route>
+  
+  <Route path="/mail/starred" exact>
+  <PureMailList type = {"starred"} location={"starred"}/>
+  </Route>
+
+  <Route path="/mail/sent" exact>
+  <PureMailList type = {"sent"} location={"sent"}/>
+  </Route>
+
+  <Route path="/mail/allmail" exact>
+  <PureMailList type = {"allmail"} location={"allmail"}/>
+  </Route>
+
+  <Route path="/mail/trash" exact>
+  <PureMailList type = {"trash"} location={"trash"}/>
+  </Route>
+  
+  
+  <Route path="/mail/:location/:mailID"  component={MailPage}>
+  </Route>
+  
+ 
+  
+  {composeMail && <ComposeMail/>}
+  
+  </div>
+
+}
+
+const Plist = React.memo(List);
+
+const PureMailList = React.memo(MailList);
+
 const useStyles = makeStyles();
 
-const App = () => {
+const Mail = (props : any) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const {inbox ,starred, composeMail} = useTypedSelector((state) => {
-    const inbox = state.mail?.mail || [];
-    const starred = inbox.filter(mail => mail.isStarred)
-    const composeMail = state.control?.composeMailOpen;
-    return {inbox , starred ,composeMail};
-  }) || {inbox: [] , starred : []};
 
-  
-
-  const [open, setOpen] = React.useState(true);
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
 
   return (
@@ -115,18 +146,10 @@ const App = () => {
       
       <main className={classes.content}>
         <div className={classes.toolbar}/>
-        <Switch>
-        <Route path="/mail/inbox" exact>
-        <MailList mailList = {inbox}/>
-        </Route>
-        <Route path="/mail/starred" exact>
-        <MailList mailList = {starred}/>
-        </Route>
-        <Route path="/mail/:location/:mailID"  component={MailPage}>
-        </Route>
-        
-        </Switch>
-        {composeMail &&<ComposeMail/>}
+       
+        <Plist/>
+
+      
       </main>
     
     </div>
@@ -134,4 +157,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default Mail;
