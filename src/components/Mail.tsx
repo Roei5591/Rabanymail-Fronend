@@ -89,24 +89,9 @@ const List = () => {
 
   return <div>        
     
-  <Route path="/mail/inbox" exact>
-  <PureMailList type = {"inbox"} location={"inbox"}/>
-  </Route>
+
+  <Route path="/mail/:location" exact component ={MailList}> 
   
-  <Route path="/mail/starred" exact>
-  <PureMailList type = {"starred"} location={"starred"}/>
-  </Route>
-
-  <Route path="/mail/sent" exact>
-  <PureMailList type = {"sent"} location={"sent"}/>
-  </Route>
-
-  <Route path="/mail/allmail" exact>
-  <PureMailList type = {"allmail"} location={"allmail"}/>
-  </Route>
-
-  <Route path="/mail/trash" exact>
-  <PureMailList type = {"trash"} location={"trash"}/>
   </Route>
   
   

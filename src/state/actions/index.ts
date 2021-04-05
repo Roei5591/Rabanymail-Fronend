@@ -151,6 +151,20 @@ export interface  deleteMailErrorAction {
   payload: string;
 }
 
+export interface  toggleMailCheckboxAction{
+  type: ActionType.TOGGLE_MALI_CHECKBOX;
+  payload: string;
+}
+
+export interface  toggleAllMailCheckboxAction{
+  type: ActionType.TOGGLE_ALL_MALI_CHECKBOX;
+  payload: {
+    mailList: Mail[];
+    reset: boolean | undefined;
+  } 
+  
+  
+}
 
 
 
@@ -185,4 +199,6 @@ export type Action =
   | toggleIsTrashAction
   | toggleIsTrashErrorAction
   | deleteMailAction
-  | deleteMailErrorAction;
+  | deleteMailErrorAction
+  | toggleMailCheckboxAction
+  | toggleAllMailCheckboxAction;

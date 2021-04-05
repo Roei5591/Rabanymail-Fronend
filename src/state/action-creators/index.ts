@@ -3,7 +3,13 @@ import { fetchInboxFromServer, markAsReadOnServer, toggleStarOnServer , sendMail
 import { loginSever, logoutServer , getUserFromServer } from '../../helpers/user';
 import { ActionType } from '../action-types';
 import {
-  Action, closeComposeMailAction, openComposeMailAction, setLocationAction, toggleSidebarAction,
+  Action,
+   closeComposeMailAction,
+   openComposeMailAction, 
+   setLocationAction,
+  toggleMailCheckboxAction,
+   toggleSidebarAction,
+   toggleAllMailCheckboxAction,
 } from '../actions';
 import { Mail } from '../Mail';
 
@@ -34,6 +40,20 @@ export const closeComposeMail = (): closeComposeMailAction => {
   };
 };
 
+export const toggleMailCheckbox = (mailId: string): toggleMailCheckboxAction => {
+  return {
+    type: ActionType.TOGGLE_MALI_CHECKBOX,
+    payload: mailId
+  };
+};
+
+export const toggleAllMailCheckbox = (mailList: Mail[],reset? : boolean): toggleAllMailCheckboxAction => {
+  return {
+    type: ActionType.TOGGLE_ALL_MALI_CHECKBOX,
+    payload: { mailList ,reset } 
+  };
+};
+
 export const login = (username: string , password: string) => {
   return async (dispatch: Dispatch<Action>) => {
 
@@ -41,7 +61,7 @@ export const login = (username: string , password: string) => {
     
   
     try {
-      const {data} : {data: {username: string , firstChar: string}} = await loginSever(username, password);
+      const {data} : {data: {username: string , firstChar: string} | false} = await loginSever(username, password);
      
       if(data) {
         dispatch({

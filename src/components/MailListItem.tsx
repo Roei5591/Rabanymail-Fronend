@@ -1,33 +1,42 @@
-import React, { useEffect } from 'react';
+import  {  useState } from 'react';
 import { Checkbox, IconButton } from '@material-ui/core';
 import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
 import StarRoundedIcon from '@material-ui/icons/StarRounded';
-import LabelImportantOutlinedIcon from '@material-ui/icons/LabelImportantOutlined';
 import './MailListItem.css';
 import moment from 'moment';
-import { Link ,useLocation } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
 import { useActions } from "../hooks/use-actions";
 import DeleteIcon from '@material-ui/icons/Delete';
-import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import EmailIcon from '@material-ui/icons/Email';
 import clsx from "clsx";
+import { useTypedSelector } from '../hooks/use-typed-selector';
 
 
 
-function MailListItem({mail ,  location}: any){
+const MailListItem = ({mail ,  location }: any) => {
 
-    //const location = useLocation();
-    const {toggleStar ,markAsRead , toggleIsTrash , deleteMail} = useActions();
-    const [hover, setHover] = React.useState(false);
-    
+   
+const {toggleStar ,markAsRead , toggleIsTrash , deleteMail} = useActions();
+const [hover, setHover] = useState(false);
+
+ const { toggleMailCheckbox} = useActions();
+
+
+  const checked = useTypedSelector((state) => {
+   return state.mail?.checked.has(mail._id);
+  }) || false;
+
+  const handleCheck =  () => {
+    toggleMailCheckbox(mail._id);
+  };
 
     const handleClickStar = () => {
         toggleStar(mail._id);
-        //console.log(location.pathname)
+        
     }
 
     const handleClickTrash = () => {
@@ -46,7 +55,8 @@ function MailListItem({mail ,  location}: any){
     }
 
 
-    const M = () => (!mail.isRead 
+    const MarkAsReadOrUnreadIcon = () => (
+        !mail.isRead 
         ?
         <Tooltip title="Mark as read" aria-label="Mark as read">
             <IconButton onClick = {handleClickIsRead}>
@@ -68,7 +78,7 @@ function MailListItem({mail ,  location}: any){
         "readMark": mail.isRead,
       })}>
         <div className="emailRow_options">
-            <Checkbox />
+            <Checkbox checked = {checked} onClick={handleCheck}/>
             <IconButton onClick = {handleClickStar}>
             { mail.isStarred 
                 ? <StarRoundedIcon fontSize = "large"/>
@@ -100,51 +110,46 @@ function MailListItem({mail ,  location}: any){
         </div>
 
         </Link>
-        <div onMouseEnter = {() => {setHover(true)}}
-           onMouseLeave={() => {setHover(false)}}>
-        { !hover ?
-            <div className="emailRow_time">
-                <h4>  {moment(mail.created).format('MMMM Do YYYY, h:mm:ss a')}</h4>
-            </div>
-        :
-            <div className="emailRow_time">
-            {!mail.isTrash 
-            ? <div>
-                <Tooltip title="move to trash" aria-label="move to trash">
-                    <IconButton onClick = {handleClickTrash}>
-                        <DeleteIcon fontSize = "large"/>
-                    </IconButton>
-                </Tooltip>
+            <div onMouseEnter = {() => {setHover(true)}} onMouseLeave={() => {setHover(false)}}>
+                <div className="emailRow_time">
+        
+            {!hover 
+                ?
+                    <h4>  {moment(mail.created).format("MMM Do") }</h4>
+                :
+                <>
+                    {!mail.isTrash 
+                    ? 
+                    <>
+                        <Tooltip title="move to trash" aria-label="move to trash">
+                            <IconButton onClick = {handleClickTrash}>
+                                <DeleteIcon fontSize = "large"/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                    :
+                    <>
+                        <Tooltip title="Delete" aria-label="Delete">
+                            <IconButton onClick = {handleClickDelete}>
+                                <DeleteForeverIcon fontSize = "large"/>
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Restore" aria-label="Restore">
+                            <IconButton onClick = {handleClickTrash}>
+                                <RestoreFromTrashIcon fontSize = "large"/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
                 
-                <M/>
-            </div>
-            :
+                     }
 
-            <div>
-
-            <Tooltip title="Delete" aria-label="Delete">
-                <IconButton onClick = {handleClickDelete}>
-                    <DeleteForeverIcon fontSize = "large"/>
-                </IconButton>
-            </Tooltip>
-
-            <Tooltip title="Restore" aria-label="Restore">
-                <IconButton onClick = {handleClickTrash}>
-                    <RestoreFromTrashIcon fontSize = "large"/>
-                </IconButton>
-            </Tooltip>
-            
-           <M/>
-
-            </div>
-                
-            }
-
-  
-    </div>
-       
+                    <MarkAsReadOrUnreadIcon/>   
+                </>
         }
-       </div>
+
+            </div>
+        </div>
        
        
     </div>

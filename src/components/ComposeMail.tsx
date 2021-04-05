@@ -1,10 +1,9 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import './ComposeMail.css';
 import CloseIcon from '@material-ui/icons/Close';
 import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-//import { closeSendMessage } from './features/mailSlice';
+
 
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -19,7 +18,6 @@ import { ContactsOutlined } from '@material-ui/icons';
 const ComposeMail = () => {
     const { register, handleSubmit, watch, errors } = useForm();
 
-    const [html1, setHtml1] = React.useState("");
     const html = useRef('');
     const {closeComposeMail} = useActions();
     
@@ -33,13 +31,11 @@ const ComposeMail = () => {
        data.to = [data.to];
        data.html = html.current;
        sendMail(data);
-     
-       //closeComposeMail();
+       closeComposeMail();
     };
 
-    const onC = (data:any) => {
+    const onChange = (data:any) => {
       html.current = data;
-     // setHtml1(data); 
    };
 
    
@@ -54,24 +50,17 @@ const ComposeMail = () => {
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input name="to" type="email" placeholder="To" ref={register({required: true})} />
-
                 <input name="subject" type="text" placeholder="Subject" ref={register()} />
-               
-                
-                <FroalaEditor
-              
-              
+                  
+            <FroalaEditor
               config={{
                 attribution: false,
                 height: 300,
                 quickInsertTags: ['p', 'div'],
                 listAdvancedTypes: true
               }}
-             // model={}
-              onModelChange={onC}
-/>
-                
-
+              onModelChange={onChange}
+                /> 
                 <div className="sendMail_options">
                     <Button type="submit" className="sendMail_send" variant="contained" color="primary">Send</Button>
                 </div>

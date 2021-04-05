@@ -30,5 +30,6 @@ export enum ActionType {
   TOGGLE_IS_TRASH_ERROR = 'toggle_is_trash_error',
   DELETE_MAIL = "delete_mail",
   DELETE_MAIL_ERROR = "delete_mail_error",
-  
+  TOGGLE_MALI_CHECKBOX = "toggle_mail_checkbox",
+  TOGGLE_ALL_MALI_CHECKBOX = "toggle_all_mail_checkbox",
 }

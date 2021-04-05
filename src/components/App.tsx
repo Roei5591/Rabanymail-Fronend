@@ -39,22 +39,20 @@ const App  = () => {
     if(username) 
     fetchAllMail();
 
-    console.log("here " + username);
+    
   },[username]);
 
   useEffect(() => {
     getUser();
-  
+    console.log(document.cookie)
   },[]);
   
 
 
-  if(loading) {
+
   
-    return <h1>Loading...</h1>
-  }
-  else if (!username ) {
-    console.log("!username");
+   if (!username ) {
+  
     return (
     <div>
     <Redirect to="/login"/>

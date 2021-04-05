@@ -27,3 +27,16 @@ return Axios({
    url: "http://localhost:7777/user",
  });
 }
+
+export const registerServer = (username: string , password: string , passwordConfirm:string) => {
+  return Axios({
+   method: "POST",
+   data: {
+     username,
+     password,
+     passwordConfirm,
+   },
+   withCredentials: true,
+   url: "http://localhost:7777/register",
+});
+}

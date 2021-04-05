@@ -12,9 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
-import Axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useActions } from '../hooks/use-actions';
+import { useTypedSelector } from '../hooks/use-typed-selector';
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 
 function Copyright() {
   return (
@@ -47,16 +48,49 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  alert:{
+    marginBottom:0,
+    marginRight: 10,
+    marginTop: 20,
+    minHeight: 0,
+   
+    position: "relative",
+    display: "flex",
+    padding: "9px 12px 9px 20px",
+    borderWidth: "1px 1px 1px 0px",
+    borderStyle: "solid",
+    borderRadius: 6,
+    fontSize: 14,
+    lineHeight: 3,
+    color: "rgb(143, 34, 27)",
+    borderColor: "rgb(249, 211, 197) rgb(249, 211, 197) rgb(249, 211, 197) rgb(207, 74, 34)",
+    backgroundColor: "rgb(252, 235, 226)",
+  },
+  alertText:{
+ 
+  alignSelf: "center",
+  mozBoxFlex: 1,
+  flexGrow: 1,
+  marginLeft: 15,
+  marginRight: 10,
+  color: "rgb(207, 74, 34)",
+  }
+  
+
 }));
 
 const SignIn = () => {
   const classes = useStyles();
   const {login , logout} = useActions();
 
+  const fail = useTypedSelector((state) => {
+    return state.user?.fail;
+   });
+
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   
-  const signInOnServer = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const signInOnServer = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(loginUsername , loginPassword)
 
@@ -77,10 +111,19 @@ const SignIn = () => {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" >
           Sign in
-        </Typography>
-        <form className={classes.form} noValidate >
+          </Typography>
+         {fail && <div role="alert" className={classes.alert}  data-testid="bannerAuthCodeError">
+         <WarningRoundedIcon style={{marginTop: 8}}/>
+            
+            <span className= {classes.alertText}>
+              Please provide a valid username and password.
+            </span>
+            
+            </div>}
+      
+        <form className={classes.form} noValidate onSubmit={signInOnServer}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -92,6 +135,7 @@ const SignIn = () => {
             autoComplete="username"
             autoFocus
             value = {loginUsername}
+            error={fail}
             onChange = {e => setLoginUsername(e.target.value)}
           />
           <TextField
@@ -105,6 +149,7 @@ const SignIn = () => {
             id="password"
             autoComplete="current-password"
             value = {loginPassword}
+            error={fail}
             onChange = {e => setLoginPassword(e.target.value)}
           />
           <FormControlLabel
@@ -117,7 +162,7 @@ const SignIn = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick = {signInOnServer}
+           
           >
             Sign In
           </Button>

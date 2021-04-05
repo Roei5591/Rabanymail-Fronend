@@ -15,6 +15,9 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import { useActions } from "../hooks/use-actions";
+import DeleteIcon from '@material-ui/icons/Delete';
+import StarRoundedIcon from '@material-ui/icons/StarRounded';
+import PresentToAllIcon from '@material-ui/icons/PresentToAll';
 
 
 
@@ -58,33 +61,28 @@ const SideMenu = () => {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Sent" , "All mail" , "trash"].map((text, index) => (
-            <Link to={'/mail/' + text.toLocaleLowerCase().replaceAll( ' ', '')} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
+          {[
+            ["Inbox", <InboxIcon />],
+            ["Starred", <StarRoundedIcon/>] ,
+            ["Sent" , <PresentToAllIcon/>],
+            ["All mail" , <MailIcon /> ],
+            ["trash",<DeleteIcon/>],
+          ].map((text : any, index) => (
+            <Link to={'/mail/' + text[0].toLocaleLowerCase().replaceAll( ' ', '')} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
             <ListItem 
             button key={text} 
-            className={clsx({[classes.loc]: text.toLocaleLowerCase().replaceAll( ' ', '') === location})}
-            onClick= {() => { setLocation(text.toLocaleLowerCase().replaceAll( ' ', ''))}}
+            className={clsx({[classes.loc]: text[0].toLocaleLowerCase().replaceAll( ' ', '') === location})}
+            onClick= {() => { setLocation(text[0].toLocaleLowerCase().replaceAll( ' ', ''))}}
             >
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {text[1]}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text[0]} />
             </ListItem>
             </Link>
           ))}
-        </List>
-
-        <Divider />
-        <List>
-          {[ ].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-              <ListItem ></ListItem> 
+            <Divider />
+            <ListItem ></ListItem> 
             <ListItem button key={"compose"} onClick={openComposeMail}>
               <ListItemIcon>
                <InboxIcon /> 
@@ -92,6 +90,9 @@ const SideMenu = () => {
               <ListItemText primary={"compose"} />
             </ListItem>
         </List>
+
+       
+        
       </Drawer>
     </div>
   );

@@ -1,13 +1,17 @@
-import produce from 'immer';
+import produce , { enableMapSet } from 'immer';
 import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { Mail } from '../Mail';
+
+
+enableMapSet();
 
 interface MailState {
   loading: boolean;
   sending: boolean
   error: string | null;
   mail: Mail[];
+  checked: Set<string>;
 }
 
 const initialState: MailState = {
@@ -15,6 +19,7 @@ const initialState: MailState = {
   sending: false,
   error: null,
   mail: [],
+  checked: new Set(),
 };
 
 const reducer = produce((state: MailState = initialState, action: Action) => {
@@ -77,7 +82,7 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
     
     case ActionType.SEND_MAIL_COMPLETE:
       state.sending = false;
-      state.mail.unshift(action.payload);
+      state.mail.push(action.payload);
       return
     
     case ActionType.SEND_MAIL_ERROR:
@@ -112,14 +117,29 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
       }
       state.mail = filletedMail;
       return 
-      return 
-
+  
     }
       
     case ActionType.DELETE_MAIL_ERROR: 
       state.error = action.payload;
       return
     
+    case ActionType.TOGGLE_ALL_MALI_CHECKBOX:
+      if(state.checked.size || action.payload.reset){
+        state.checked = new Set();
+      } else {
+        state.checked = new Set(action.payload.mailList.map(mail => mail._id));
+      }
+      return
+
+    case ActionType.TOGGLE_MALI_CHECKBOX:
+        if(state.checked.has(action.payload)){
+          state.checked.delete(action.payload);
+        } else {
+          state.checked.add(action.payload);
+        }
+        return
+
     default:
       return state;
   }

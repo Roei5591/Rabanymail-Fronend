@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from 'react-router-dom';
+import { registerServer } from '../helpers/user';
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -48,6 +50,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const [singUpUsername, setSingUpUsername] = useState("");
+  const [singUpPassword, setSingUpnPassword] = useState("");
+  const [singUpPasswordConfirm, setSingUpPasswordConfirm] = useState("");
+
+  const [singUpUsernameError, setSingUpUsernameError] = useState(undefined);
+  const [singUpPasswordError, setSingUpnPasswordError] = useState(undefined );
+  const [singUpPasswordConfirmError, setSingUpPasswordConfirmError] = useState(undefined);
+
+  const signUpOnServer = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errors = (await registerServer(singUpUsername, singUpPassword, singUpPasswordConfirm)).data;
+    console.log(errors);
+    
+    if(errors.length){
+    setSingUpUsernameError(errors.find((e: {param: string}) => e.param === "username")?.msg )
+    setSingUpnPasswordError(errors.find((e: {param: string}) => e.param === "password")?.msg )
+    setSingUpPasswordConfirmError(errors.find((e: {param: string}) => e.param === "passwordConfirm")?.msg )
+    } else {
+      history.push("/login");
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +84,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={signUpOnServer}>
           <Grid container spacing={2}>
  
             <Grid item xs={12}>
@@ -67,12 +92,16 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="User Name"
-                name="user name"
+                name="username"
                 autoComplete="username"
+                onChange = {e => setSingUpUsername(e.target.value)}
+                helperText= {singUpUsernameError}
+                error = {singUpUsernameError ? true : false}
               />
-            </Grid>
+                </Grid>
+         
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -83,12 +112,24 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange = {e => setSingUpnPassword(e.target.value)}
+                helperText= {singUpPasswordError}
+                error = {singUpPasswordError ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password-confirm"
+                label="password confirm"
+                type="password"
+                id="password-confirm"
+                autoComplete="current-password"
+                onChange = {e => setSingUpPasswordConfirm(e.target.value)}
+                helperText= {singUpPasswordConfirmError}
+                error = {singUpPasswordConfirmError ? true : false}
               />
             </Grid>
           </Grid>

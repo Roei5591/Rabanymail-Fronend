@@ -1,9 +1,15 @@
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useEffect, useState } from 'react';
-import { Checkbox, IconButton } from '@material-ui/core';
+import { Checkbox, IconButton, Tooltip } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import RedoIcon from '@material-ui/icons/Redo';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import DeleteIcon from '@material-ui/icons/Delete'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import EmailIcon from '@material-ui/icons/Email';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import KeyboardIcon from '@material-ui/icons/Keyboard';
@@ -16,6 +22,8 @@ import Axios from 'axios';
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import { ContactlessOutlined } from "@material-ui/icons";
+import {Mail} from "../state/Mail";
+import { stat } from "node:fs";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,49 +33,68 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MailList( { type , location} :any) {
+
+
+export default function MailList( {match }: any) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([0]);
+
+  const location = match.params.location;
+
+  const {setLocation ,fetchAllMail , toggleAllMailCheckbox , toggleIsTrash , deleteMail , markAsRead} = useActions();
 
   const mailList = useTypedSelector((state) => {
-    console.log("fs")
-    if(type === "inbox") return state.mail?.mail.filter(mail => !mail.isOutbound && !mail.isTrash).reverse();
-    if(type === "starred") return state.mail?.mail.filter(mail => mail.isStarred && !mail.isTrash).reverse();
-    if(type === "sent") return state.mail?.mail.filter(mail => mail.isOutbound && !mail.isTrash).reverse();
-    if(type === "allmail") return state.mail?.mail.filter(mail => !mail.isTrash).reverse();
-    if(type === "trash"){
-      console.log(state.mail?.mail.filter(mail => mail.isTrash).reverse())
-      return state.mail?.mail.filter(mail => mail.isTrash).reverse();
-    }
+    if(state.control?.location === "inbox") return state.mail?.mail.filter(mail => !mail.isOutbound && !mail.isTrash).reverse();
+    if(state.control?.location === "starred") return state.mail?.mail.filter(mail => mail.isStarred && !mail.isTrash).reverse();
+    if(state.control?.location === "sent") return state.mail?.mail.filter(mail => mail.isOutbound && !mail.isTrash).reverse();
+    if(state.control?.location === "allmail") return state.mail?.mail.filter(mail => !mail.isTrash).reverse();
+    if(state.control?.location === "trash") return state.mail?.mail.filter(mail => mail.isTrash).reverse();    
     return [];
-  }) || [];
+  }) as Mail[];
 
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const checkAll = useTypedSelector((state) => {
+    return state.mail?.checked;
+   }) || new Set();
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
- 
-
-  const {setLocation ,fetchAllMail} = useActions();
   useEffect(() => {
-    setLocation(type);
-    if(type === "inbox" || type === "trash")
-    fetchAllMail();
-    
+    setLocation(location);  
 },[] );
 
+useEffect(() => {
+  toggleAllMailCheckbox(mailList ,true);
+  if(location === "inbox")
+  fetchAllMail();
+},[location] );
+
+  const refresh = () => {
+    fetchAllMail();
+  }
 
 
+  const handleCheckAll =  () => {
+    toggleAllMailCheckbox(mailList);
+  };
+
+
+const handleClickTrash = () => {
+  toggleAllMailCheckbox(mailList,true);
+  toggleIsTrash(Array.from(checkAll));
+  
+}
+
+const handleClickDelete = () => {
+  toggleAllMailCheckbox(mailList,true);
+  deleteMail(Array.from(checkAll));
+  
+}
+
+const handleClickRead = () => {
+  markAsRead(Array.from(checkAll) , true);
+}
+
+const handleClickUnRead = () => {
+  markAsRead(Array.from(checkAll) , false);
+}
 
 
 
@@ -75,38 +102,61 @@ export default function MailList( { type , location} :any) {
     <div className="emailList">
         <div className="emailList_settings">
             <div className="emailList_settingsLeft">
-                <Checkbox />
-                <IconButton>
-                    <ArrowDropDownIcon />
-                </IconButton>
-                <IconButton>
-                    <RedoIcon />
-                </IconButton>
-                <IconButton>
-                    <MoreVertIcon />
-                </IconButton>
+                <Checkbox  checked={checkAll.size !== 0} onClick = {handleCheckAll}/>
+                {!checkAll.size 
+                ?
+                <Tooltip title="Refresh" aria-label="Refresh"> 
+                    <IconButton onClick = {refresh}>
+                      <RefreshIcon />
+                    </IconButton>
+                </Tooltip>
+                :
+                 <>
+                 {(location !== "trash")
+                  ?
+                  <Tooltip title="move to trash" aria-label="move to trash">
+                    <IconButton onClick = {handleClickTrash}>
+                      <DeleteIcon />
+                   </IconButton>
+                  </Tooltip>
+                  :
+                  <>
+                   <Tooltip title="Restore" aria-label="Restore">
+                    <IconButton onClick = {handleClickTrash}>
+                      <RestoreFromTrashIcon />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete" aria-label="Delete">
+                    <IconButton onClick = {handleClickDelete}>
+                      <DeleteForeverIcon />
+                   </IconButton>
+                  </Tooltip>
+                  </>
+                }
+                <Tooltip title="Mark as read" aria-label="Mark as read">
+                  <IconButton onClick = {handleClickRead}>
+                    <DraftsIcon  />
+                  </IconButton>
+                </Tooltip>  
+        
+                <Tooltip title="Mark as unread" aria-label="Mark as unread">
+                  <IconButton onClick = {handleClickUnRead}>
+                      <EmailIcon />
+                   </IconButton>
+                </Tooltip> 
+                </>
+              }
+             
             </div>
-            <div className="emailList_settingsRight">
-                <IconButton>
-                    <ChevronLeftIcon />
-                </IconButton>
-                <IconButton>
-                    <ChevronRightIcon />
-                </IconButton>
-                <IconButton>
-                    <KeyboardIcon />
-                </IconButton>
-                <IconButton>
-                    <SettingsIcon />
-                </IconButton>
-            </div>
+         
         </div>
 
         <div className="emailList_list">
             {mailList.map( (mail:any) => (
                 
                 <MailListItem key={mail._id} mail={mail} location={location}/>
-              
+
             ))}
         </div>
     </div>
