@@ -6,7 +6,7 @@ interface UserState {
   loading: boolean;
   fail: boolean;
   error: string | null;
-  username: string;
+  username: string | undefined;
   firstChar: string;
 }
 
@@ -14,7 +14,7 @@ const initialState: UserState = {
   loading: true,
   fail: false,
   error: null,
-  username: "",
+  username: undefined,
   firstChar: "",
 };
 

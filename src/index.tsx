@@ -6,6 +6,7 @@ import App from './components/App';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { store } from './state';
 import { Provider } from 'react-redux';
+import { CookiesProvider } from 'react-cookie';
 
 
 
@@ -13,12 +14,14 @@ import { Provider } from 'react-redux';
 const T  = () => {
   
   return (
-    
   <Provider store={store}>
+   
   < Router>
      <App/>
    </Router>
-  </Provider>);
+  
+  </Provider>
+  );
 
 }
 

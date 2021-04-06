@@ -9,7 +9,7 @@ import { Button, IconButton, InputBase, Menu, MenuItem, Paper, Tooltip } from '@
 import SearchIcon from "@material-ui/icons/Search";
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
-import { logout } from '../state/action-creators';
+
 
 
 const useStyles = makeStyles();
@@ -74,7 +74,7 @@ export default function MyAppBar() {
           <InputBase
         className={classes.input}
         placeholder="Search Mail"
-        inputProps={{ "aria-label": "search google maps" }}
+        inputProps={{ "aria-label": "Search Mail" }}
             />
            </Paper>
            </div>
@@ -92,8 +92,17 @@ export default function MyAppBar() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Typography variant ="h5" > {`${username}@rabanymail.com`} </Typography>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <Typography style={{margin: 10}} variant ="h5" > {`${username}@rabanymail.com`} </Typography>
+        <MenuItem onClick={handleLogout}>
+          
+        <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+          >
+          Logout
+          </Button>
+          </MenuItem>
       </Menu>
 
         </div>

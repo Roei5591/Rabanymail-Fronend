@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 10,
     marginTop: 20,
     minHeight: 0,
-   
     position: "relative",
     display: "flex",
     padding: "9px 12px 9px 20px",
@@ -99,9 +98,6 @@ const SignIn = () => {
      // logout();
   });
   }
-
-
-
 
 
   return (
@@ -168,7 +164,7 @@ const SignIn = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-            <Link  to={'/'} style={{ textDecoration: 'none' , color: "inherit" }}>
+            <Link  to={'/login'} style={{ textDecoration: 'none' , color: "inherit" }}>
                 Forgot password?
               </Link>
             </Grid>

@@ -54,6 +54,11 @@ const [hover, setHover] = useState(false);
         
     }
 
+    const handleClickIsMail = () => {
+        if(!mail.isRead)
+        markAsRead([mail._id] , true);
+        
+    }
 
     const MarkAsReadOrUnreadIcon = () => (
         !mail.isRead 
@@ -88,9 +93,7 @@ const [hover, setHover] = useState(false);
         </div>
         
         
-       <Link onClick={() => {
-           if (!mail.isRead) 
-           markAsRead(mail._id, true)}} className="clickable" to={`/mail/${location}/${mail._id}`} style={{ textDecoration: 'none' , color: "inherit" }}
+       <Link onClick={handleClickIsMail} className="clickable" to={`/mail/${location}/${mail._id}`} style={{ textDecoration: 'none' , color: "inherit" }}
            onMouseEnter = {() => {setHover(true)}}
            onMouseLeave={() => {setHover(false)}}>
 

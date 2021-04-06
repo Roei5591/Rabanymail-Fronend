@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
 import makeStyles from './styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -89,7 +89,7 @@ const List = () => {
 
   return <div>        
     
-
+    <Switch>
   <Route path="/mail/:location" exact component ={MailList}> 
   
   </Route>
@@ -98,8 +98,10 @@ const List = () => {
   <Route path="/mail/:location/:mailID"  component={MailPage}>
   </Route>
   
- 
-  
+  <Route path="/" >
+  <Redirect to="/mail/inbox"/>
+  </Route>
+  </Switch>
   {composeMail && <ComposeMail/>}
   
   </div>

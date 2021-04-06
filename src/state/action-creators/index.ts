@@ -93,7 +93,7 @@ export const getUser = () =>
     try {
       const {data} : {data: {username: string , firstChar: string}}  = await getUserFromServer();
 
-      ///console.log("sdsad " + data.charAt(0));
+     
       dispatch({
         type: ActionType.GET_USER_COMPLETE,
         payload: {username: data.username , firstChar: data.firstChar}
