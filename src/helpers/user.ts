@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const localUrl = "http://localhost:7777"
-const serverUrl = "https://rabany-mail-backend.herokuapp.com/"
+const serverUrl = "https://rabany-mail.herokuapp.com"
 
 const url = serverUrl;
 

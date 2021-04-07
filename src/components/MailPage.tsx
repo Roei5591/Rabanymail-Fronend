@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
 import DeleteIcon from '@material-ui/icons/Delete';
 import EmailIcon from '@material-ui/icons/Email';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
-
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -62,7 +60,7 @@ const MailPage =( { match} : any) => {
                         <ArrowBackIcon  />
                     </IconButton>
                     
-                {mail.isTrash
+                {!mail.isTrash
                   ?
                   <Tooltip title="move to trash" aria-label="move to trash">
                     <IconButton onClick = {handleClickTrash}>

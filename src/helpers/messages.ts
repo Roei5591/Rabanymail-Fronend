@@ -4,7 +4,7 @@ import {htmlToText} from 'html-to-text';
 
 
 const localUrl = "http://localhost:7777"
-const serverUrl = "https://rabany-mail-backend.herokuapp.com/"
+const serverUrl = "https://rabany-mail.herokuapp.com"
 
 const url = serverUrl;
 
@@ -12,7 +12,7 @@ export const fetchInboxFromServer : () => AxiosPromise<Mail[]> = () => {
  return Axios({
     method: "GET",
     withCredentials: true,
-    url: url + "/messages/inbox/",
+    url: url + "/messages/inbox",
 })
 }
 
@@ -21,7 +21,7 @@ export const fetchAllMailFromServer : (mailSize : number) => AxiosPromise<{allMa
        method: "POST",
        data: {mailSize} ,
        withCredentials: true,
-       url: url + "/messages/allmail/",
+       url: url + "/messages/allmail",
    })
    }
 
@@ -30,7 +30,7 @@ export const toggleStarOnServer  = (mailId: string) => {
        method: "POST",
        data: { mailId : mailId},
        withCredentials: true,
-       url: url + "/messages/starred/",
+       url: url + "/messages/starred",
    })
 }
 
@@ -39,7 +39,7 @@ export const toggleIsTrashOnServer  = (mailId: string[]) => {
        method: "POST",
        data: { mailId : mailId},
        withCredentials: true,
-       url: url + "/messages/istrash/",
+       url: url + "/messages/istrash",
    })
 }
 
@@ -48,7 +48,7 @@ export const deleteMailOnServer  = (mailId: string[]) => {
        method: "POST",
        data: { mailId : mailId},
        withCredentials: true,
-       url: url + "/messages/deleteMessages/",
+       url: url + "/messages/deleteMessages",
    })
 }
 
@@ -66,7 +66,7 @@ export const sendMailFromServer = (msg: {
         method: "POST",
         data: msg,
         withCredentials: true,
-        url: url + "/messages/",
+        url: url + "/messages",
     });
 }
 
@@ -76,6 +76,6 @@ export const markAsReadOnServer  = (mailId: string[] , isRead : boolean) => {
        method: "POST",
        data: { mailId , isRead},
        withCredentials: true,
-       url: url + "/messages/markasread/",
+       url: url + "/messages/markasread",
    })
 }
