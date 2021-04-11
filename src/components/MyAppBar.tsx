@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import{  useState } from 'react';
 import clsx from "clsx";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -33,7 +33,7 @@ export default function MyAppBar() {
 
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);

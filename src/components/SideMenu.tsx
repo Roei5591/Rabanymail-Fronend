@@ -67,12 +67,15 @@ const SideMenu = () => {
             ["Sent" , <PresentToAllIcon/>],
             ["All mail" , <MailIcon /> ],
             ["trash",<DeleteIcon/>],
-          ].map((text : any, index) => (
-            <Link to={'/mail/' + text[0].toLocaleLowerCase().replaceAll( ' ', '')} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
+          ].map((text : any, index) => {
+            
+            const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
+            return (
+            <Link to={'/mail/' + locationFromArray} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
             <ListItem 
             button key={text} 
-            className={clsx({[classes.loc]: text[0].toLocaleLowerCase().replaceAll( ' ', '') === location})}
-            onClick= {() => { setLocation(text[0].toLocaleLowerCase().replaceAll( ' ', ''))}}
+            className={clsx({[classes.loc]: locationFromArray === location})}
+            onClick= {() => { setLocation(locationFromArray)}}
             >
               <ListItemIcon>
                 {text[1]}
@@ -80,7 +83,10 @@ const SideMenu = () => {
               <ListItemText primary={text[0]} />
             </ListItem>
             </Link>
-          ))}
+            )
+          }
+          
+          )}
             <Divider />
             <ListItem ></ListItem> 
             <ListItem button key={"compose"} onClick={openComposeMail}>

@@ -1,21 +1,20 @@
-import ReactDOM from 'react-dom';
+
 import Mail from './Mail';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {  Switch, Route, Redirect } from 'react-router-dom';
+import { useEffect } from 'react';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import { useActions } from '../hooks/use-actions';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import React from 'react';
-import { ContactsOutlined } from '@material-ui/icons';
 
 
-const PureMail = React.memo(Mail);
+
+//const PureMail = React.memo(Mail);
 
 
 const App  = () => {
-  const [firstLoad, setFirstLoad] = useState(true);
-
+  
   const {getUser , fetchAllMail} = useActions();
   
 
@@ -24,14 +23,13 @@ const App  = () => {
     return state.user?.username 
   });
 
-  const loading = useTypedSelector((state) => {
-    return  state.user?.loading
-  });
+  //const loading = useTypedSelector((state) => {
+   // return  state.user?.loading
+  //});
 
-  const error = useTypedSelector((state) => {
-    
-    return  state.mail?.error
-  });
+  //const error = useTypedSelector((state) => {
+  //  return  state.mail?.error
+ // });
 
 
   
@@ -42,34 +40,28 @@ const App  = () => {
     else
     getUser();
 
-  },[username]);
+  },[username , getUser , fetchAllMail]);
 
-    
-   if (username === undefined) return <></> 
-   if (!username) {
-    return (
-    <div>
-    <Redirect to="/login"/>
-    <Route path="/login">
-    <SignIn />
-     </Route>
-
-  <Route path="/signup">
-    <SignUp />
-  </Route>
-  </div>
-  )
-  } else 
-  return (
-    
-      
-     
-        <Mail/>
+  //before reaching the server for user
+   if (username === undefined) return <></> ;
    
+   //if no user is login
+   if (!username) {
+    return <>
+        <Switch>
+       
+        <Route path="/login"  component ={SignIn}/>
+        <Route path="/signup" component ={SignUp}/>
+        
+        <Route path="/" >
+          <Redirect to="/login"/>
+        </Route>
 
-     
-     
-  )
+        </Switch>
+        </>
+   }
+ 
+  return ( <Mail/>)
 
   
   }

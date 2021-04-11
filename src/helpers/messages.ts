@@ -6,7 +6,7 @@ import {htmlToText} from 'html-to-text';
 const localUrl = "http://localhost:7777"
 const serverUrl = "https://rabany-mail.herokuapp.com"
 
-const url = serverUrl;
+const url = localUrl;
 
 export const fetchInboxFromServer : () => AxiosPromise<Mail[]> = () => {
  return Axios({

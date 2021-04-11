@@ -190,9 +190,7 @@ export const toggleStar = (mailId : string) =>
   return async (dispatch: Dispatch<Action>) => {
     dispatch({type: ActionType.TOGGLE_STAR , payload: mailId});
     try {
-      const res = await toggleStarOnServer(mailId);
-      
-      
+     await toggleStarOnServer(mailId);
     
     } catch (err) {
       
@@ -257,10 +255,8 @@ export const toggleIsTrash = (mailId : string[]) =>
     
     dispatch({type: ActionType.TOGGLE_IS_TRASH , payload: mailId});
     try {
-      const res = await toggleIsTrashOnServer(mailId);
+       await toggleIsTrashOnServer(mailId);
       
-      
-    
     } catch (err) {
       
       dispatch({

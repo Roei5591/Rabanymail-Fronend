@@ -11,21 +11,16 @@ import 'froala-editor/js/froala_editor.pkgd.min.js';
 
 import FroalaEditor from 'react-froala-wysiwyg';
 import { useActions } from '../hooks/use-actions';
-import { ContactsOutlined } from '@material-ui/icons';
+
 
 
 
 const ComposeMail = () => {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit } = useForm();
 
     const html = useRef('');
-    const {closeComposeMail} = useActions();
+    const {closeComposeMail , sendMail} = useActions();
     
-    
-    
-    const {sendMail} = useActions();
-    
-
 
     const onSubmit = (data:any) => {
        data.to = [data.to];
@@ -40,14 +35,14 @@ const ComposeMail = () => {
 
    
 
-  
-
     return (
         <div className="sendMail">
+          
             <div className="sendMail_header">
                 <h3>New Message</h3>
                 <CloseIcon className="sendMail_close" onClick={closeComposeMail} />
             </div>
+            
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input name="to" type="email" placeholder="To" ref={register({required: true})} />
                 <input name="subject" type="text" placeholder="Subject" ref={register()} />
@@ -62,7 +57,13 @@ const ComposeMail = () => {
               onModelChange={onChange}
                 /> 
                 <div className="sendMail_options">
-                    <Button type="submit" className="sendMail_send" variant="contained" color="primary">Send</Button>
+                    <Button 
+                    type="submit"
+                    className="sendMail_send" 
+                    variant="contained" 
+                    color="primary">
+                        Send
+                        </Button>
                 </div>
             </form>
 

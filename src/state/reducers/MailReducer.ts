@@ -110,7 +110,7 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
 
     case ActionType.DELETE_MAIL: {
       const mailId = action.payload;
-      const filletedMail = new Array();
+      const filletedMail = [];
       for(const mail of state.mail) {
       if(!mailId.includes(mail._id))
       filletedMail.push(mail);

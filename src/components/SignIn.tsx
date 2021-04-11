@@ -22,7 +22,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link  to={'/'} style={{ textDecoration: 'none' , color: "inherit" }}>
-        Your Website
+        Rabany Mail
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = () => {
   const classes = useStyles();
-  const {login , logout} = useActions();
+  const {login} = useActions();
 
   const fail = useTypedSelector((state) => {
     return state.user?.fail;
@@ -128,7 +128,7 @@ const SignIn = () => {
             id="username"
             label="User Name"
             name="username"
-            autoComplete="username"
+            //autoComplete="username"
             autoFocus
             value = {loginUsername}
             error={fail}

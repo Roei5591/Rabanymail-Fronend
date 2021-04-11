@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
+
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EmailIcon from '@material-ui/icons/Email';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { IconButton, Tooltip } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -11,7 +8,7 @@ import './MailPage.css';
 import moment from 'moment';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
-
+import TrashIcons from './TrashIcons';
 import parse from 'html-react-parser';
 
 
@@ -51,7 +48,7 @@ const MailPage =( { match} : any) => {
       }
 
 
-    if(!mail) return <div></div>;
+    if(!mail) return <></>;
     return (
         <div className="mail">
             <div className="mail_tools">
@@ -60,29 +57,12 @@ const MailPage =( { match} : any) => {
                         <ArrowBackIcon  />
                     </IconButton>
                     
-                {!mail.isTrash
-                  ?
-                  <Tooltip title="move to trash" aria-label="move to trash">
-                    <IconButton onClick = {handleClickTrash}>
-                      <DeleteIcon />
-                   </IconButton>
-                  </Tooltip>
-                  :
-                  <>
-                   <Tooltip title="Restore" aria-label="Restore">
-                    <IconButton onClick = {handleClickTrash}>
-                      <RestoreFromTrashIcon />
-                    </IconButton>
-                  </Tooltip>
+                    < TrashIcons
+                    isTrash = {mail.isTrash}
+                    onClickTrash = {handleClickTrash}
+                    onClickDelete = {handleClickDelete}
+                  />
 
-                  <Tooltip title="Delete" aria-label="Delete">
-                    <IconButton onClick = {handleClickDelete}>
-                      <DeleteForeverIcon />
-                   </IconButton>
-                  </Tooltip>
-                  </>
-                }
-           
                 <Tooltip title="Mark as unread" aria-label="Mark as unread">
                   <IconButton onClick = {handleClickUnRead}>
                       <EmailIcon />

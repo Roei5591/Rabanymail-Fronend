@@ -6,14 +6,12 @@ import './MailListItem.css';
 import moment from 'moment';
 import { Link  } from 'react-router-dom';
 import { useActions } from "../hooks/use-actions";
-import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import EmailIcon from '@material-ui/icons/Email';
 import clsx from "clsx";
 import { useTypedSelector } from '../hooks/use-typed-selector';
+import TrashIcons from './TrashIcons';
 
 
 
@@ -121,32 +119,13 @@ const [hover, setHover] = useState(false);
                     <h4>  {moment(mail.created).format("MMM Do") }</h4>
                 :
                 <>
-                    {!mail.isTrash 
-                    ? 
-                    <>
-                        <Tooltip title="move to trash" aria-label="move to trash">
-                            <IconButton onClick = {handleClickTrash}>
-                                <DeleteIcon fontSize = "large"/>
-                            </IconButton>
-                        </Tooltip>
-                    </>
-                    :
-                    <>
-                        <Tooltip title="Delete" aria-label="Delete">
-                            <IconButton onClick = {handleClickDelete}>
-                                <DeleteForeverIcon fontSize = "large"/>
-                            </IconButton>
-                        </Tooltip>
-
-                        <Tooltip title="Restore" aria-label="Restore">
-                            <IconButton onClick = {handleClickTrash}>
-                                <RestoreFromTrashIcon fontSize = "large"/>
-                            </IconButton>
-                        </Tooltip>
-                    </>
-                
-                     }
-
+                < TrashIcons
+                    isTrash = {mail.isTrash}
+                    fontSize = {"large"}
+                    onClickTrash = {handleClickTrash}
+                    onClickDelete = {handleClickDelete}
+                />
+                    
                     <MarkAsReadOrUnreadIcon/>   
                 </>
         }

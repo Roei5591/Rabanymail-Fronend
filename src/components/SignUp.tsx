@@ -3,8 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -20,7 +19,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link  to={'/'} style={{ textDecoration: 'none' , color: "inherit" }}>
-        Your Website
+        Rabany Mail
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -142,7 +141,7 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container justify="flex-start">
             <Grid item>
             <Link  to={'/login'} style={{ textDecoration: 'none' , color: "inherit" }}>
                 Already have an account? Sign in

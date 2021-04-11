@@ -1,42 +1,23 @@
-import { makeStyles } from "@material-ui/core/styles";
-import React, { useEffect, useState } from 'react';
+
+import  { useEffect} from 'react';
 import { Checkbox, IconButton, Tooltip } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import RedoIcon from '@material-ui/icons/Redo';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import DeleteIcon from '@material-ui/icons/Delete'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import EmailIcon from '@material-ui/icons/Email';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import KeyboardIcon from '@material-ui/icons/Keyboard';
-import SettingsIcon from '@material-ui/icons/Settings';
 import './MailList.css';
 import MailListItem from './MailListItem';
-
-
-import Axios from 'axios';
+import TrashIcons from './TrashIcons';
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
-import { ContactlessOutlined } from "@material-ui/icons";
 import {Mail} from "../state/Mail";
-import { stat } from "node:fs";
 
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
-  }
-}));
+
 
 
 
 export default function MailList( {match }: any) {
-  const classes = useStyles();
+
 
   const location = match.params.location;
 
@@ -56,45 +37,47 @@ export default function MailList( {match }: any) {
     return state.mail?.checked;
    }) || new Set();
 
-  useEffect(() => {
-    setLocation(location);  
-},[] );
 
 useEffect(() => {
+  setLocation(location);
   toggleAllMailCheckbox(mailList ,true);
   if(location === "inbox")
   fetchAllMail();
-},[location] );
+  },[setLocation, toggleAllMailCheckbox, fetchAllMail, location ] );
 
   const refresh = () => {
     fetchAllMail();
   }
 
-
   const handleCheckAll =  () => {
     toggleAllMailCheckbox(mailList);
   };
 
+  const handleClickTrash = () => {
+    toggleAllMailCheckbox(mailList,true);
+    toggleIsTrash(Array.from(checkAll));
+    } 
 
-const handleClickTrash = () => {
-  toggleAllMailCheckbox(mailList,true);
-  toggleIsTrash(Array.from(checkAll));
-  
-}
-
-const handleClickDelete = () => {
+  const handleClickDelete = () => {
   toggleAllMailCheckbox(mailList,true);
   deleteMail(Array.from(checkAll));
   
-}
+  }
 
-const handleClickRead = () => {
+  const handleClickRead = () => {
   markAsRead(Array.from(checkAll) , true);
-}
+  }
 
-const handleClickUnRead = () => {
+  const handleClickUnRead = () => {
   markAsRead(Array.from(checkAll) , false);
-}
+  }
+
+  const RefreshIconTooltip = () =>
+  <Tooltip title="Refresh" aria-label="Refresh"> 
+    <IconButton onClick = {refresh}>
+      <RefreshIcon />
+    </IconButton>
+  </Tooltip> 
 
 
 
@@ -105,35 +88,16 @@ const handleClickUnRead = () => {
                 <Checkbox  checked={checkAll.size !== 0} onClick = {handleCheckAll}/>
                 {!checkAll.size 
                 ?
-                <Tooltip title="Refresh" aria-label="Refresh"> 
-                    <IconButton onClick = {refresh}>
-                      <RefreshIcon />
-                    </IconButton>
-                </Tooltip>
+                <RefreshIconTooltip/>
                 :
                  <>
-                 {(location !== "trash")
-                  ?
-                  <Tooltip title="move to trash" aria-label="move to trash">
-                    <IconButton onClick = {handleClickTrash}>
-                      <DeleteIcon />
-                   </IconButton>
-                  </Tooltip>
-                  :
-                  <>
-                   <Tooltip title="Restore" aria-label="Restore">
-                    <IconButton onClick = {handleClickTrash}>
-                      <RestoreFromTrashIcon />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete" aria-label="Delete">
-                    <IconButton onClick = {handleClickDelete}>
-                      <DeleteForeverIcon />
-                   </IconButton>
-                  </Tooltip>
-                  </>
-                }
+      
+                <TrashIcons
+                isTrash = {location === "trash"}
+                onClickTrash = {handleClickTrash}
+                onClickDelete = {handleClickDelete}
+                />
+                 
                 <Tooltip title="Mark as read" aria-label="Mark as read">
                   <IconButton onClick = {handleClickRead}>
                     <DraftsIcon  />
@@ -147,16 +111,14 @@ const handleClickUnRead = () => {
                 </Tooltip> 
                 </>
               }
-             
+
             </div>
          
         </div>
 
         <div className="emailList_list">
             {mailList.map( (mail:any) => (
-                
                 <MailListItem key={mail._id} mail={mail} location={location}/>
-
             ))}
         </div>
     </div>
