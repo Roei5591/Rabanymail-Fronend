@@ -13,7 +13,7 @@ import parse from 'html-react-parser';
 
 
 
-const MailPage =( { match} : any) => {
+const MailPage = ( { match} : any) => {
     
     const { toggleIsTrash , deleteMail , markAsRead} = useActions();
     const history = useHistory();
