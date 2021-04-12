@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 200;
 
-export default () => makeStyles((theme) => {
+ const styles = () => makeStyles((theme) => {
   const drawerWithClose = theme.spacing(7) + 1;
 
   return {
@@ -98,3 +98,5 @@ export default () => makeStyles((theme) => {
   }
   };
 });
+
+export default styles;

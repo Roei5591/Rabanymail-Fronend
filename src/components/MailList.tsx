@@ -9,28 +9,25 @@ import MailListItem from './MailListItem';
 import TrashIcons from './TrashIcons';
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
+import  useMailBox  from "../hooks/use-mail-box";
 import {Mail} from "../state/Mail";
 
+interface MailListProps {
+  match: {
+    params: {
+      location: string
+    }
+  }
+}
 
-
-
-
-
-export default function MailList( {match }: any) {
+export default function MailList( {match }: MailListProps) {
 
 
   const location = match.params.location;
 
   const {setLocation ,fetchAllMail , toggleAllMailCheckbox , toggleIsTrash , deleteMail , markAsRead} = useActions();
 
-  const mailList = useTypedSelector((state) => {
-    if(state.control?.location === "inbox") return state.mail?.mail.filter(mail => !mail.isOutbound && !mail.isTrash).reverse();
-    if(state.control?.location === "starred") return state.mail?.mail.filter(mail => mail.isStarred && !mail.isTrash).reverse();
-    if(state.control?.location === "sent") return state.mail?.mail.filter(mail => mail.isOutbound && !mail.isTrash).reverse();
-    if(state.control?.location === "allmail") return state.mail?.mail.filter(mail => !mail.isTrash).reverse();
-    if(state.control?.location === "trash") return state.mail?.mail.filter(mail => mail.isTrash).reverse();    
-    return [];
-  }) as Mail[];
+  const mailList = useMailBox();
 
 
   const checkAll = useTypedSelector((state) => {
@@ -117,7 +114,7 @@ useEffect(() => {
         </div>
 
         <div className="emailList_list">
-            {mailList.map( (mail:any) => (
+            {mailList.map((mail) => (
                 <MailListItem key={mail._id} mail={mail} location={location}/>
             ))}
         </div>

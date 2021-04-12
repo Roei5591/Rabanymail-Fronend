@@ -1,5 +1,3 @@
-
-
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
@@ -8,24 +6,17 @@ import { store } from './state';
 import { Provider } from 'react-redux';
 
 
-
-
-
-const T  = () => {
-  
+const RabanyMail  = () => {
   return (
-  <Provider store={store}>
-   
-  < Router>
-     <App/>
-   </Router>
-  
-  </Provider>
+    <Provider store={store}>
+      <Router>
+        <App/>
+      </Router>
+    </Provider>
   );
-
 }
 
 
-ReactDOM.render(<T/>, document.querySelector('#root'));
+ReactDOM.render(<RabanyMail/>, document.querySelector('#root'));
 
 

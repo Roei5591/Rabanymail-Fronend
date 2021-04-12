@@ -12,10 +12,14 @@ import EmailIcon from '@material-ui/icons/Email';
 import clsx from "clsx";
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import TrashIcons from './TrashIcons';
+import {Mail} from "../state/Mail";
 
+interface MailListItemProps {
+    mail : Mail; 
+    location: string
+}
 
-
-const MailListItem = ({mail ,  location }: any) => {
+const MailListItem = ({mail ,  location }: MailListItemProps) => {
 
    
 const {toggleStar ,markAsRead , toggleIsTrash , deleteMail} = useActions();
@@ -91,16 +95,20 @@ const [hover, setHover] = useState(false);
         </div>
         
         
-       <Link onClick={handleClickIsMail} className="clickable" to={`/mail/${location}/${mail._id}`} style={{ textDecoration: 'none' , color: "inherit" }}
-           onMouseEnter = {() => {setHover(true)}}
-           onMouseLeave={() => {setHover(false)}}>
-
+    <Link 
+        onClick={handleClickIsMail} 
+        className="clickable" 
+        to={`/mail/${location}/${mail._id}`} 
+        style={{ textDecoration: 'none' , color: "inherit" }}
+        onMouseEnter = {() => {setHover(true)}}
+        onMouseLeave={() => {setHover(false)}}>
         
         <div className="emailRow_title" >
-        <h3>
-            {mail.isOutbound ? `To:${mail.to[0]}` : mail.from }
-        </h3>
+            <h3>
+                {mail.isOutbound ? `To:${mail.to[0]}` : mail.from }
+            </h3>
         </div>
+        
         <div className="emailRow_message">
             <h4>
                 {mail.subject}
@@ -110,13 +118,16 @@ const [hover, setHover] = useState(false);
             </h4>
         </div>
 
-        </Link>
-            <div onMouseEnter = {() => {setHover(true)}} onMouseLeave={() => {setHover(false)}}>
-                <div className="emailRow_time">
+    </Link>
+        <div 
+            onMouseEnter = {() => {setHover(true)}} 
+            onMouseLeave={() => {setHover(false)}}>
+            
+            <div className="emailRow_time">
         
             {!hover 
                 ?
-                    <h4>  {moment(mail.created).format("MMM Do") }</h4>
+                <h4>{moment(mail.created).format("MMM Do") }</h4>
                 :
                 <>
                 < TrashIcons
@@ -134,8 +145,8 @@ const [hover, setHover] = useState(false);
         </div>
        
        
-    </div>
-)
+        </div>
+    )
 }
 
 export default MailListItem;

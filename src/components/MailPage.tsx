@@ -11,32 +11,36 @@ import { useActions } from '../hooks/use-actions';
 import TrashIcons from './TrashIcons';
 import parse from 'html-react-parser';
 
+interface MailPageProps {
+  match: {
+    params: {
+      mailID: string
+    }
+  }
+}
 
-
-const MailPage = ( { match} : any) => {
+const MailPage = ({match} : MailPageProps) => {
     
-    const { toggleIsTrash , deleteMail , markAsRead} = useActions();
+    const { toggleIsTrash , deleteMail , markAsRead ,setLocation} = useActions();
     const history = useHistory();
-
-   // const [mail, setMail] = React.useState<any>({});
 
     const mail = useTypedSelector((state) => {
         return state.mail?.mail.find( mail => mail._id === match.params.mailID);
       });
 
-      const goBack = () => history.goBack()
-
       const handleClickTrash = () => {
-        if(mail)
+        if(mail) {
         toggleIsTrash([mail._id]);
-        
+        setLocation("trash");
+        history.push(`/mail/trash/${mail._id}`);
+        }
       }
       
       const handleClickDelete = () => {
-        if(mail)
-        deleteMail([mail._id]);
-        history.goBack();
-        
+        if(mail) {
+          deleteMail([mail._id]);
+          history.push(`/mail/trash`);
+        }
       }
       
      
@@ -50,45 +54,44 @@ const MailPage = ( { match} : any) => {
 
     if(!mail) return <></>;
     return (
-        <div className="mail">
-            <div className="mail_tools">
-                <div className="mail_toolsLeft">
-                    <IconButton onClick = {goBack}>
-                        <ArrowBackIcon  />
-                    </IconButton>
+      <div className="mail">
+        <div className="mail_tools">
+          <div className="mail_toolsLeft">
+            <IconButton onClick = {history.goBack}>
+              <ArrowBackIcon />
+            </IconButton>
                     
-                    < TrashIcons
-                    isTrash = {mail.isTrash}
-                    onClickTrash = {handleClickTrash}
-                    onClickDelete = {handleClickDelete}
-                  />
+            < TrashIcons
+              isTrash = {mail.isTrash}
+              onClickTrash = {handleClickTrash}
+              onClickDelete = {handleClickDelete}
+            />
 
-                <Tooltip title="Mark as unread" aria-label="Mark as unread">
-                  <IconButton onClick = {handleClickUnRead}>
-                      <EmailIcon />
-                   </IconButton>
-                </Tooltip> 
+            <Tooltip title="Mark as unread" aria-label="Mark as unread">
+              <IconButton onClick = {handleClickUnRead}>
+                <EmailIcon />
+              </IconButton>
+            </Tooltip> 
                
-              
-                </div>
+          </div>
 
-                <div className="mail_toolsRight">
-              
-                </div>
-            </div>
-            <div className="mail_body">
-                <div className="mail_bodyHeader">
-                    <h2>{mail.subject}</h2> 
-                    <LabelImportantIcon className="mail_important" />
-                    <p>{mail.from}</p>
-                    <p className="mail_time">{moment(mail.created).format('MM/DD/YYYY')}</p>
-                </div>
+          <div className="mail_toolsRight">
+          </div>
+        </div>
+            
+        <div className="mail_body">
+          <div className="mail_bodyHeader">
+            <h2>{mail.subject}</h2> 
+            <LabelImportantIcon className="mail_important" />
+            <p>{mail.from}</p>
+            <p className="mail_time">{moment(mail.created).format('MM/DD/YYYY')}</p>
+          </div>
 
-                <div className="mail_message">
-                    {parse(mail.html)}
-            </div>
-        </div>
-        </div>
+          <div className="mail_message">
+             {parse(mail.html)}
+          </div>
+      </div>
+    </div>
     )
 }
 

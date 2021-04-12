@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { makeStyles as makeStyles2, useTheme } from "@material-ui/core/styles";
 import { Link } from 'react-router-dom';
 import makeStyles from './styles';
 import Drawer from "@material-ui/core/Drawer";
@@ -26,7 +25,6 @@ const useStyles = makeStyles();
 const SideMenu = () => {
   
   const classes = useStyles();
-  const theme = useTheme();
 
   const {openComposeMail ,toggleSideBar ,setLocation} = useActions();
   
@@ -50,56 +48,64 @@ const SideMenu = () => {
           })
         }}
       >
-        <div className={classes.toolbar}>
-          <IconButton onClick={toggleSideBar} >
-            {open ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {[
-            ["Inbox", <InboxIcon />],
-            ["Starred", <StarRoundedIcon/>] ,
-            ["Sent" , <PresentToAllIcon/>],
-            ["All mail" , <MailIcon /> ],
-            ["trash",<DeleteIcon/>],
-          ].map((text : any, index) => {
-            
-            const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
-            return (
-            <Link to={'/mail/' + locationFromArray} style={{ textDecoration: 'none' , color: "inherit" }} key={text}>
-            <ListItem 
-            button key={text} 
-            className={clsx({[classes.loc]: locationFromArray === location})}
-            onClick= {() => { setLocation(locationFromArray)}}
-            >
-              <ListItemIcon>
-                {text[1]}
-              </ListItemIcon>
-              <ListItemText primary={text[0]} />
-            </ListItem>
+
+      <div className={classes.toolbar}>
+        <IconButton onClick={toggleSideBar} >
+          {open ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
+          )}
+        </IconButton>
+      </div>
+      
+      <Divider />
+      
+      <List>
+        {[
+          ["Inbox", <InboxIcon />],
+          ["Starred", <StarRoundedIcon/>] ,
+          ["Sent" , <PresentToAllIcon/>],
+          ["All mail" , <MailIcon /> ],
+          ["trash",<DeleteIcon/>],
+        ].map((text : any, index) => {    
+          const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
+          return (
+            <Link to={'/mail/' + locationFromArray} 
+                  style={{ textDecoration: 'none' , color: "inherit" }} 
+                  key={text}>
+                    
+              <ListItem 
+                button key={text} 
+                className={clsx({[classes.loc]: locationFromArray === location})}
+                onClick= {() => { setLocation(locationFromArray)}}
+              >
+                <ListItemIcon>
+                  {text[1]}
+                </ListItemIcon>
+                <ListItemText primary={text[0]} />
+              
+              </ListItem>
             </Link>
             )
           }
           
           )}
-            <Divider />
-            <ListItem ></ListItem> 
-            <ListItem button key={"compose"} onClick={openComposeMail}>
-              <ListItemIcon>
-               <InboxIcon /> 
-              </ListItemIcon>
-              <ListItemText primary={"compose"} />
-            </ListItem>
-        </List>
+           
+        <Divider />
+        <ListItem ></ListItem> 
+        <ListItem button key={"compose"} onClick={openComposeMail}>
+          <ListItemIcon>
+            <InboxIcon /> 
+          </ListItemIcon>
+          <ListItemText primary={"compose"} />
+        </ListItem>
+      </List>
 
        
         
-      </Drawer>
+    
+    </Drawer>
     </div>
   );
 }

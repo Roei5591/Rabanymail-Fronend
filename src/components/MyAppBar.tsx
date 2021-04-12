@@ -5,8 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import makeStyles from './styles';
-import { Button, IconButton, InputBase, Menu, MenuItem, Paper, Tooltip } from '@material-ui/core';
-import SearchIcon from "@material-ui/icons/Search";
+import { Button, Menu, MenuItem, Tooltip } from '@material-ui/core';
+
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
 
@@ -16,6 +16,8 @@ const useStyles = makeStyles();
 
 
 export default function MyAppBar() {
+
+  const classes = useStyles();
 
   const {logout} = useActions();
 
@@ -31,8 +33,7 @@ export default function MyAppBar() {
     return state.control?.sideBarOpen;
   });
 
-  const classes = useStyles();
-
+  
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event: any) => {
@@ -63,20 +64,7 @@ export default function MyAppBar() {
           
 
         <div className={classes.AppbBarMiddle}>
-        <Paper component="form" className={classes.search}>
-         <IconButton
-        type="submit"
-        className={classes.iconButton}
-        aria-label="search"
-        >
-        <SearchIcon />
-          </IconButton>
-          <InputBase
-        className={classes.input}
-        placeholder="Search Mail"
-        inputProps={{ "aria-label": "Search Mail" }}
-            />
-           </Paper>
+
            </div>
           
           <div className = {classes.AppBarRight}>
