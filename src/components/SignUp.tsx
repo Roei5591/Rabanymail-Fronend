@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import { registerServer } from '../helpers/user';
 import { useHistory } from "react-router-dom";
 import RabanyMailLogo from './RabanyMailLogo';
+import { PersonalVideo } from '@material-ui/icons';
 
 
 
@@ -64,7 +65,8 @@ export default function SignUp() {
 
   const signUpOnServer = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const errors = (await registerServer(singUpUsername, singUpPassword, singUpPasswordConfirm)).data;
+    setSingUpUsername(prev => prev.trim());
+    const errors = (await registerServer(singUpUsername.trim(), singUpPassword, singUpPasswordConfirm)).data;
     console.log(errors);
     
     if(errors.length){
@@ -75,7 +77,8 @@ export default function SignUp() {
       history.push("/login");
     }
   }
-
+  
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -99,6 +102,7 @@ export default function SignUp() {
                 name="username"
                 autoComplete="username"
                 onChange = {e => setSingUpUsername(e.target.value)}
+                value = {singUpUsername}
                 helperText= {singUpUsernameError}
                 error = {singUpUsernameError ? true : false}
               />
@@ -115,6 +119,7 @@ export default function SignUp() {
                 id="password"
                 autoComplete="current-password"
                 onChange = {e => setSingUpnPassword(e.target.value)}
+                value = {singUpPassword}
                 helperText= {singUpPasswordError}
                 error = {singUpPasswordError ? true : false}
               />
@@ -130,6 +135,7 @@ export default function SignUp() {
                 id="password-confirm"
                 autoComplete="current-password"
                 onChange = {e => setSingUpPasswordConfirm(e.target.value)}
+                value = {singUpPasswordConfirm}
                 helperText= {singUpPasswordConfirmError}
                 error = {singUpPasswordConfirmError ? true : false}
               />
@@ -158,4 +164,6 @@ export default function SignUp() {
       </Box>
     </Container>
   );
+
+
 }
