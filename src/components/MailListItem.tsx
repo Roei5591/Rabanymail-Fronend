@@ -1,4 +1,4 @@
-import  {  useState } from 'react';
+import  { memo, useState } from 'react';
 import { Checkbox, IconButton } from '@material-ui/core';
 import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
 import StarRoundedIcon from '@material-ui/icons/StarRounded';
@@ -86,7 +86,7 @@ const [hover, setHover] = useState(false);
       })}>
         <div className="emailRow_options">
             <Checkbox checked = {checked} onClick={handleCheck}/>
-            <IconButton onClick = {handleClickStar}>
+            <IconButton  onClick = {handleClickStar}>
             { mail.isStarred 
                 ? <StarRoundedIcon fontSize = "large"/>
                 : <StarBorderRoundedIcon fontSize = "large"/>}
@@ -94,14 +94,16 @@ const [hover, setHover] = useState(false);
 
         </div>
         
-        
-    <Link 
+        <Link 
         onClick={handleClickIsMail} 
-        className="clickable" 
+        className="clickable"
         to={`/mail/${location}/${mail._id}`} 
         style={{ textDecoration: 'none' , color: "inherit" }}
         onMouseEnter = {() => {setHover(true)}}
-        onMouseLeave={() => {setHover(false)}}>
+        onMouseLeave={() => {setHover(false)}}>   
+    
+    <div className="clickable">   
+  
         
         <div className="emailRow_title" >
             <h3>
@@ -112,41 +114,44 @@ const [hover, setHover] = useState(false);
         <div className="emailRow_message">
             <h4>
                 {mail.subject}
-                <span className="emailRow_description"> - {" "}
-                    {mail.text}
-                </span>
             </h4>
+
+            <span className="emailRow_description"> - {" "}
+                {mail.text}
+            </span>
+            
         </div>
 
-    </Link>
-        <div 
+    
+    </div> 
+    </Link>  
+        
+    <div className="emailRow_time"
             onMouseEnter = {() => {setHover(true)}} 
             onMouseLeave={() => {setHover(false)}}>
             
-            <div className="emailRow_time">
-        
-            {!hover 
-                ?
-                <h4>{moment(mail.created).format("MMM Do") }</h4>
-                :
-                <>
-                < TrashIcons
-                    isTrash = {mail.isTrash}
-                    fontSize = {"large"}
-                    onClickTrash = {handleClickTrash}
-                    onClickDelete = {handleClickDelete}
-                />
+    {!hover
+        ?
+        <h4>{moment(mail.created).format("MMM Do") }</h4>
+         :
+        <>
+        < TrashIcons
+            isTrash = {mail.isTrash}
+            fontSize = {"large"}
+            onClickTrash = {handleClickTrash}
+            onClickDelete = {handleClickDelete}
+        />
                     
                     <MarkAsReadOrUnreadIcon/>   
-                </>
+           </>
         }
 
-            </div>
-        </div>
+            
+    </div>
        
        
         </div>
     )
 }
 
-export default MailListItem;
+export default memo(MailListItem);

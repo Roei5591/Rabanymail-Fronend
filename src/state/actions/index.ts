@@ -159,13 +159,35 @@ export interface  toggleMailCheckboxAction{
 export interface  toggleAllMailCheckboxAction{
   type: ActionType.TOGGLE_ALL_MALI_CHECKBOX;
   payload: {
-    mailList: Mail[];
+    mailList: string[];
     reset: boolean | undefined;
   } 
-  
-  
 }
 
+  export interface  searchMailAction{ 
+    type: ActionType.SEARCH_MAIL;
+    payload: string;
+  }
+
+  export interface  setSendTimer{ 
+    type: ActionType.SET_SEND_TIMER;
+    payload: NodeJS.Timeout | null;
+  }
+
+  export interface  setSendTimerAction{ 
+    type: ActionType.SET_SEND_TIMER;
+    payload: NodeJS.Timeout | null;
+  }
+
+  export interface  saveDraftAction{ 
+    type: ActionType.SAVE_DRAFT;
+    payload: {
+      to: string[],
+      subject: string,
+      html: string,
+      flag: boolean,
+    } | null;
+  }
 
 
 export type Action =
@@ -201,4 +223,7 @@ export type Action =
   | deleteMailAction
   | deleteMailErrorAction
   | toggleMailCheckboxAction
-  | toggleAllMailCheckboxAction;
+  | toggleAllMailCheckboxAction
+  | searchMailAction
+  | setSendTimerAction
+  | saveDraftAction;

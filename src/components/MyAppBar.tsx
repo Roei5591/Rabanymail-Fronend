@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import makeStyles from './styles';
 import { Button, Menu, MenuItem, Tooltip } from '@material-ui/core';
-
+import SearchBar from './SearchBar'
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
 
@@ -64,7 +64,7 @@ export default function MyAppBar() {
           
 
         <div className={classes.AppbBarMiddle}>
-
+        <SearchBar />
            </div>
           
           <div className = {classes.AppBarRight}>

@@ -6,7 +6,7 @@ export interface Mail {
   isOutbound: boolean,
   _id: string,
   from: string,
-  text: string,
+  text: string ,
   html: string,
   created: string,
   isRead: boolean,

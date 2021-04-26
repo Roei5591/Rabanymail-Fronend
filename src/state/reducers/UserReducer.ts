@@ -62,6 +62,7 @@ const reducer = produce((state: UserState = initialState, action: Action) => {
       
     case ActionType.LOGOUT:
       state.loading = true;
+      state.error = null;
       return
     
     case ActionType.LOGOUT_COMPLETE:

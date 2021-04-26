@@ -6,6 +6,9 @@ interface ControlState {
   sideBarOpen: boolean;
   composeMailOpen: boolean;
   location: string;
+  searchTermRegExp: RegExp | null;
+  searchTerm: string;
+  timer: NodeJS.Timeout | null;
 
 }
 
@@ -13,10 +16,23 @@ const initialState: ControlState = {
   sideBarOpen: true,
   composeMailOpen: false,
   location: "",
+  searchTermRegExp: null,
+  searchTerm: "",
+  timer: null,
 };
 
-const reducer = produce((state: ControlState = initialState, action: Action) => {
+const reducer = produce((state: ControlState = initialState, action: Action ) => {
+
+
   switch (action.type) {
+
+    case ActionType.SET_SEND_TIMER:
+      
+      if(!action.payload && state.timer){
+        clearTimeout(state.timer)
+      }
+      state.timer = action.payload;
+      return
 
     case ActionType.SET_LOCATION:
       state.location = action.payload;
@@ -34,8 +50,17 @@ const reducer = produce((state: ControlState = initialState, action: Action) => 
 
       case ActionType.CLOSE_COMPOSE_MAIL:
         state.composeMailOpen = false;
+        return
 
+      case ActionType.SEARCH_MAIL:
+        if(action.payload === "") {
+          state.searchTermRegExp = null;
+        } else {
+          state.searchTermRegExp = new RegExp("(" + action.payload + ")(?!([^<]+)?>)", "gi");
+        }
+        state.searchTerm = action.payload;
       return
+
     default:
       return state;
   }

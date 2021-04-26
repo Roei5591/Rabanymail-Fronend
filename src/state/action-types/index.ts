@@ -32,4 +32,7 @@ export enum ActionType {
   DELETE_MAIL_ERROR = "delete_mail_error",
   TOGGLE_MALI_CHECKBOX = "toggle_mail_checkbox",
   TOGGLE_ALL_MALI_CHECKBOX = "toggle_all_mail_checkbox",
+  SEARCH_MAIL = "search_mail",
+  SET_SEND_TIMER = "set_send_timer",
+  SAVE_DRAFT = "SAVE_DRAFT",
 }

@@ -17,10 +17,48 @@ import { useActions } from "../hooks/use-actions";
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarRoundedIcon from '@material-ui/icons/StarRounded';
 import PresentToAllIcon from '@material-ui/icons/PresentToAll';
+import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 
+import { useCallback ,memo } from "react";
 
+const linkStyle = { textDecoration: 'none' , color: "inherit" };
 
 const useStyles = makeStyles();
+
+
+const MenuItem = memo(({text , location} : any) => {
+  
+  const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
+  const classes = useStyles();
+  const { setLocation} = useActions();
+
+
+  const handleClick = useCallback((locationFromArray : string) => {
+    return () => { 
+      if(location !== locationFromArray)
+      setLocation(locationFromArray)
+    }
+  } , [])
+
+  return (
+  <Link to={'/mail/' + locationFromArray} 
+  style={linkStyle} 
+  key={text}
+  >
+     
+<ListItem 
+button key={text} 
+className={clsx({[classes.loc]: locationFromArray === location})}
+onClick= {handleClick(locationFromArray)}
+>
+<ListItemIcon>
+  {text[1]}
+</ListItemIcon>
+<ListItemText primary={text[0]} />
+
+</ListItem>
+</Link> )
+})
 
 const SideMenu = () => {
   
@@ -32,6 +70,20 @@ const SideMenu = () => {
 
   const location = useTypedSelector(state => state.control?.location); 
 
+  const handleClick = useCallback((locationFromArray : string) => {
+    return () => { 
+      if(location !== locationFromArray)
+      setLocation(locationFromArray)
+    }
+  } , [])
+
+  const menuArray = [
+    ["Inbox", <InboxIcon />],
+    ["Starred", <StarRoundedIcon/>] ,
+    ["Sent" , <PresentToAllIcon/>],
+    ["All mail" , <MailIcon /> ],
+    ["trash",<DeleteIcon/>],
+  ];
 
   return (
     <div>
@@ -62,31 +114,11 @@ const SideMenu = () => {
       <Divider />
       
       <List>
-        {[
-          ["Inbox", <InboxIcon />],
-          ["Starred", <StarRoundedIcon/>] ,
-          ["Sent" , <PresentToAllIcon/>],
-          ["All mail" , <MailIcon /> ],
-          ["trash",<DeleteIcon/>],
-        ].map((text : any, index) => {    
-          const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
+       
+        { menuArray.map((text : any, index) => {    
+          
           return (
-            <Link to={'/mail/' + locationFromArray} 
-                  style={{ textDecoration: 'none' , color: "inherit" }} 
-                  key={text}>
-                    
-              <ListItem 
-                button key={text} 
-                className={clsx({[classes.loc]: locationFromArray === location})}
-                onClick= {() => { setLocation(locationFromArray)}}
-              >
-                <ListItemIcon>
-                  {text[1]}
-                </ListItemIcon>
-                <ListItemText primary={text[0]} />
-              
-              </ListItem>
-            </Link>
+            <MenuItem key={text} text={text} location={location}/>
             )
           }
           
@@ -96,7 +128,7 @@ const SideMenu = () => {
         <ListItem ></ListItem> 
         <ListItem button key={"compose"} onClick={openComposeMail}>
           <ListItemIcon>
-            <InboxIcon /> 
+            <CreateSharpIcon /> 
           </ListItemIcon>
           <ListItemText primary={"compose"} />
         </ListItem>

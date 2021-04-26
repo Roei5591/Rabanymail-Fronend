@@ -1,5 +1,5 @@
 
-import  { useEffect} from 'react';
+import  { useEffect , memo} from 'react';
 import { Checkbox, IconButton, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -20,14 +20,16 @@ interface MailListProps {
   }
 }
 
-export default function MailList( {match }: MailListProps) {
+const MailList = ( {match }: MailListProps) => {
 
 
   const location = match.params.location;
 
   const {setLocation ,fetchAllMail , toggleAllMailCheckbox , toggleIsTrash , deleteMail , markAsRead} = useActions();
 
-  const mailList = useMailBox();
+  const mailList = useMailBox()
+
+  const mailListId = mailList.map(mail => mail._id);
 
 
   const checkAll = useTypedSelector((state) => {
@@ -37,7 +39,7 @@ export default function MailList( {match }: MailListProps) {
 
 useEffect(() => {
   setLocation(location);
-  toggleAllMailCheckbox(mailList ,true);
+  toggleAllMailCheckbox(mailListId ,true);
   if(location === "inbox")
   fetchAllMail();
   },[setLocation, toggleAllMailCheckbox, fetchAllMail, location ] );
@@ -47,16 +49,16 @@ useEffect(() => {
   }
 
   const handleCheckAll =  () => {
-    toggleAllMailCheckbox(mailList);
+    toggleAllMailCheckbox(mailListId);
   };
 
   const handleClickTrash = () => {
-    toggleAllMailCheckbox(mailList,true);
+    toggleAllMailCheckbox(mailListId,true);
     toggleIsTrash(Array.from(checkAll));
     } 
 
   const handleClickDelete = () => {
-  toggleAllMailCheckbox(mailList,true);
+  toggleAllMailCheckbox(mailListId,true);
   deleteMail(Array.from(checkAll));
   
   }
@@ -121,3 +123,5 @@ useEffect(() => {
     </div>
 );
 }
+
+export default MailList;

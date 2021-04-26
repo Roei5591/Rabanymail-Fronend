@@ -67,7 +67,7 @@ export default function SignUp() {
     e.preventDefault();
     setSingUpUsername(prev => prev.trim());
     const errors = (await registerServer(singUpUsername.trim(), singUpPassword, singUpPasswordConfirm)).data;
-    console.log(errors);
+    
     
     if(errors.length){
     setSingUpUsernameError(errors.find((e: {param: string}) => e.param === "username")?.msg )

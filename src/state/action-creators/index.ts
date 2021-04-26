@@ -10,15 +10,43 @@ import {
   toggleMailCheckboxAction,
    toggleSidebarAction,
    toggleAllMailCheckboxAction,
+   searchMailAction,
 } from '../actions';
 import { Mail } from '../Mail';
 
 import { RootState } from '../reducers';
 
+export const setDraft = (draft :
+  {
+  to: string[],
+  subject: string,
+  html: string,
+  flag: boolean,
+  } | null) => {
+  return {
+    type: ActionType.SAVE_DRAFT,
+    payload: draft
+  };
+};
+
+export const clearTimer = () => {
+  return {
+    type: ActionType.SET_SEND_TIMER,
+    payload:null,
+  };
+};
+
 export const setLocation = (location: string): setLocationAction => {
   return {
     type: ActionType.SET_LOCATION,
     payload: location
+  };
+};
+
+export const setSearchTerm = (searchTerm: string): searchMailAction => {
+  return {
+    type: ActionType.SEARCH_MAIL,
+    payload: searchTerm
   };
 };
 
@@ -47,7 +75,7 @@ export const toggleMailCheckbox = (mailId: string): toggleMailCheckboxAction => 
   };
 };
 
-export const toggleAllMailCheckbox = (mailList: Mail[],reset? : boolean): toggleAllMailCheckboxAction => {
+export const toggleAllMailCheckbox = (mailList: string[],reset? : boolean): toggleAllMailCheckboxAction => {
   return {
     type: ActionType.TOGGLE_ALL_MALI_CHECKBOX,
     payload: { mailList ,reset } 
@@ -166,7 +194,16 @@ export const fetchAllMail = () =>
     const mailSize = getState().mail?.mail.length || 0;
   
     try {
-      const {allMail , needToUpdate}  = (await fetchAllMailFromServer(mailSize)).data;
+      
+      const res = await fetchAllMailFromServer(mailSize)
+      
+      if(res.status !== 200  && typeof res.data === "string"){
+       // throw new Error(res.data) 
+      } 
+
+      if(typeof res.data === "string") return;
+
+      const {allMail , needToUpdate}  = res.data;
      
       
       if(needToUpdate)
@@ -174,12 +211,19 @@ export const fetchAllMail = () =>
         type: ActionType.FETCH_ALL_MAIL_COMPLETE,
         payload: allMail
       });
-     
+    
     
     } catch (err) {
+      let payload
+      if(err.response){
+        payload = err.response.data;
+      } else {
+        payload = "Network error";
+      }
+    
       dispatch({
         type: ActionType.FETCH_ALL_MAIL_ERROR,
-        payload: err.message
+        payload
       });
     }
   };
@@ -205,28 +249,33 @@ export const toggleStar = (mailId : string) =>
 export const sendMail = (msg: {
   to: string[],
   subject: string,
-  html: string
-  text: string | undefined
+  html: string,
+  text?: string ,
 }) =>
 {
+
   return async (dispatch: Dispatch<Action>) => {
 
-    dispatch({type: ActionType.SEND_MAIL });
-    
-    try {
-      const res = (await sendMailFromServer(msg)).data as Mail;
-      console.log(res);
-      dispatch({type: ActionType.SEND_MAIL_COMPLETE , payload: res });
-    
-    } catch (err) {
-      console.log("star error: " + err.message)
-      dispatch({
-        type: ActionType.SEND_MAIL_ERROR,
-        payload: err.message
-      });
-    }
+    let timer = setTimeout(async () => {
+      dispatch({type: ActionType.SET_SEND_TIMER, payload: null });
+      dispatch({type: ActionType.SEND_MAIL });
+      try {
+        const res = (await sendMailFromServer(msg)).data as Mail;
+        dispatch({type: ActionType.SEND_MAIL_COMPLETE , payload: res });
+        
+      } catch (err) {
+        
+        dispatch({
+          type: ActionType.SEND_MAIL_ERROR,
+          payload: err.message
+        });
+      }
+    } , 10000);
+    dispatch({type: ActionType.SET_SEND_TIMER , payload: timer });
   };
 }
+
+
 
 export const markAsRead = (mailId : string[] , isRead : boolean) =>
 {
@@ -286,4 +335,6 @@ export const deleteMail = (mailId : string[]) =>
     }
   };
 }
+
+
 

@@ -6,7 +6,7 @@ import {htmlToText} from 'html-to-text';
 const localUrl = "http://localhost:7777"
 const serverUrl = "https://rabany-mail.herokuapp.com"
 
-const url = localUrl;
+const url = serverUrl;
 
 export const fetchInboxFromServer : () => AxiosPromise<Mail[]> = () => {
  return Axios({
@@ -16,7 +16,7 @@ export const fetchInboxFromServer : () => AxiosPromise<Mail[]> = () => {
 })
 }
 
-export const fetchAllMailFromServer : (mailSize : number) => AxiosPromise<{allMail : Mail[] , needToUpdate : boolean} > = (mailSize : number) => {
+export const fetchAllMailFromServer : (mailSize : number) => AxiosPromise<{allMail : Mail[] , needToUpdate : boolean} | string  > = (mailSize : number) => {
     return Axios({
        method: "POST",
        data: {mailSize} ,
@@ -55,8 +55,8 @@ export const deleteMailOnServer  = (mailId: string[]) => {
 export const sendMailFromServer = (msg: {
     to: string[],
     subject: string,
-    html: string
-    text: string | undefined
+    html: string,
+    text?: string, 
   }) => {
     
    

@@ -8,10 +8,16 @@ enableMapSet();
 
 interface MailState {
   loading: boolean;
-  sending: boolean
+  sending: boolean;
   error: string | null;
   mail: Mail[];
   checked: Set<string>;
+  draft: {
+    to: string[];
+    subject: string;
+    html: string;
+    flag: boolean;
+  } | null;
 }
 
 const initialState: MailState = {
@@ -20,12 +26,24 @@ const initialState: MailState = {
   error: null,
   mail: [],
   checked: new Set(),
+  draft: null
 };
 
 const reducer = produce((state: MailState = initialState, action: Action) => {
   
 
   switch (action.type) {
+
+    case ActionType.SET_SEND_TIMER:
+      
+      if(state.draft){
+      state.draft = {...state.draft , flag: true};
+      }
+      return
+
+    case ActionType.SAVE_DRAFT:
+      state.draft = action.payload;
+      return
       
     case ActionType.FETCH_INBOX:
       state.loading = true;
@@ -48,6 +66,7 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
     case ActionType.FETCH_ALL_MAIL_COMPLETE:
       state.loading = false;
       state.mail = action.payload;
+      
       return
   
       case ActionType.FETCH_ALL_MAIL_ERROR:
@@ -128,7 +147,7 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
       if(state.checked.size || action.payload.reset){
         state.checked = new Set();
       } else {
-        state.checked = new Set(action.payload.mailList.map(mail => mail._id));
+        state.checked = new Set(action.payload.mailList);
       }
       return
 
