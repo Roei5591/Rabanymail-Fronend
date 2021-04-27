@@ -19,26 +19,26 @@ import StarRoundedIcon from '@material-ui/icons/StarRounded';
 import PresentToAllIcon from '@material-ui/icons/PresentToAll';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 
-import { useCallback ,memo } from "react";
+
 
 const linkStyle = { textDecoration: 'none' , color: "inherit" };
 
 const useStyles = makeStyles();
 
 
-const MenuItem = memo(({text , location} : any) => {
+const MenuItem = ({text , location} : any) => {
   
   const locationFromArray = text[0].toLocaleLowerCase().replaceAll( ' ', '');
   const classes = useStyles();
   const { setLocation} = useActions();
 
 
-  const handleClick = useCallback((locationFromArray : string) => {
+  const handleClick = (locationFromArray : string) => {
     return () => { 
       if(location !== locationFromArray)
       setLocation(locationFromArray)
     }
-  } , [])
+  } 
 
   return (
   <Link to={'/mail/' + locationFromArray} 
@@ -58,24 +58,17 @@ onClick= {handleClick(locationFromArray)}
 
 </ListItem>
 </Link> )
-})
+}
 
 const SideMenu = () => {
   
   const classes = useStyles();
 
-  const {openComposeMail ,toggleSideBar ,setLocation} = useActions();
+  const {openComposeMail ,toggleSideBar } = useActions();
   
   const open = useTypedSelector(state => state.control?.sideBarOpen); 
 
   const location = useTypedSelector(state => state.control?.location); 
-
-  const handleClick = useCallback((locationFromArray : string) => {
-    return () => { 
-      if(location !== locationFromArray)
-      setLocation(locationFromArray)
-    }
-  } , [])
 
   const menuArray = [
     ["Inbox", <InboxIcon />],

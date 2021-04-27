@@ -3,7 +3,7 @@ import Axios from 'axios';
 const localUrl = "http://localhost:7777"
 const serverUrl = "https://rabany-mail.herokuapp.com"
 
-const url = serverUrl;
+const url = localUrl;
 
 export const loginSever = (username: string , password: string) => {
   return Axios({

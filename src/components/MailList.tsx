@@ -1,5 +1,5 @@
 
-import  { useEffect , memo} from 'react';
+import  { useEffect } from 'react';
 import { Checkbox, IconButton, Tooltip } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -10,7 +10,7 @@ import TrashIcons from './TrashIcons';
 import { useActions } from "../hooks/use-actions";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import  useMailBox  from "../hooks/use-mail-box";
-import {Mail} from "../state/Mail";
+
 
 interface MailListProps {
   match: {
@@ -39,7 +39,7 @@ const MailList = ( {match }: MailListProps) => {
 
 useEffect(() => {
   setLocation(location);
-  toggleAllMailCheckbox(mailListId ,true);
+  toggleAllMailCheckbox(null ,true);
   if(location === "inbox")
   fetchAllMail();
   },[setLocation, toggleAllMailCheckbox, fetchAllMail, location ] );
@@ -53,12 +53,12 @@ useEffect(() => {
   };
 
   const handleClickTrash = () => {
-    toggleAllMailCheckbox(mailListId,true);
+    toggleAllMailCheckbox(null,true);
     toggleIsTrash(Array.from(checkAll));
     } 
 
   const handleClickDelete = () => {
-  toggleAllMailCheckbox(mailListId,true);
+  toggleAllMailCheckbox(null,true);
   deleteMail(Array.from(checkAll));
   
   }

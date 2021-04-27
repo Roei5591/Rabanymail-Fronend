@@ -159,8 +159,8 @@ export interface  toggleMailCheckboxAction{
 export interface  toggleAllMailCheckboxAction{
   type: ActionType.TOGGLE_ALL_MALI_CHECKBOX;
   payload: {
-    mailList: string[];
-    reset: boolean | undefined;
+    mailList: string[] | null;
+    reset?: boolean;
   } 
 }
 
@@ -181,13 +181,14 @@ export interface  toggleAllMailCheckboxAction{
 
   export interface  saveDraftAction{ 
     type: ActionType.SAVE_DRAFT;
-    payload: {
+    payload: { draft:{
       to: string[],
       subject: string,
       html: string,
       flag: boolean,
-    } | null;
-  }
+    } | null,
+    raiseFlag?:boolean
+  }}
 
 
 export type Action =

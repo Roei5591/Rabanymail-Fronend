@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './ComposeMail.css';
 import CloseIcon from '@material-ui/icons/Close';
 import MinimizeIcon from '@material-ui/icons/Minimize';
@@ -6,12 +6,8 @@ import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { IconButton } from '@material-ui/core';
 import { useActions } from '../hooks/use-actions';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
 import { Editor } from '@tinymce/tinymce-react';
 import { useTypedSelector } from '../hooks/use-typed-selector';
-
-
-
 
 const ComposeForm = ({refs} : {refs: any}) => {
 
@@ -25,9 +21,10 @@ const ComposeForm = ({refs} : {refs: any}) => {
         data.to = [data.to];
         data.html = refs.message.current;
         sendMail(data);
-        closeComposeMail();
+        
         const draft = {...data , flag: false}
         setDraft(draft);
+        closeComposeMail();
      };
  
      const handleEditorChange = (data:any) => { 
@@ -84,7 +81,6 @@ const ComposeForm = ({refs} : {refs: any}) => {
 }
 
 
-
 const ComposeMail = () => {
 
     const[minimize , setMinimize] = useState(false);
@@ -115,7 +111,7 @@ const ComposeMail = () => {
             setDraft(null);
             openComposeMail();
         }
-    },[flag])
+    },[flag,setDraft, openComposeMail])
     
    const handleEditorMinimize = () => {
     setMinimize(prev => !prev);

@@ -11,6 +11,7 @@ import {
    toggleSidebarAction,
    toggleAllMailCheckboxAction,
    searchMailAction,
+   saveDraftAction,
 } from '../actions';
 import { Mail } from '../Mail';
 
@@ -22,10 +23,10 @@ export const setDraft = (draft :
   subject: string,
   html: string,
   flag: boolean,
-  } | null) => {
+  } | null , raiseFlag?: boolean): saveDraftAction => {
   return {
     type: ActionType.SAVE_DRAFT,
-    payload: draft
+    payload: {draft , raiseFlag}
   };
 };
 
@@ -75,7 +76,7 @@ export const toggleMailCheckbox = (mailId: string): toggleMailCheckboxAction => 
   };
 };
 
-export const toggleAllMailCheckbox = (mailList: string[],reset? : boolean): toggleAllMailCheckboxAction => {
+export const toggleAllMailCheckbox = (mailList: string[] | null,reset? : boolean): toggleAllMailCheckboxAction => {
   return {
     type: ActionType.TOGGLE_ALL_MALI_CHECKBOX,
     payload: { mailList ,reset } 
@@ -258,6 +259,7 @@ export const sendMail = (msg: {
 
     let timer = setTimeout(async () => {
       dispatch({type: ActionType.SET_SEND_TIMER, payload: null });
+      //clearTimeout(timer);
       dispatch({type: ActionType.SEND_MAIL });
       try {
         const res = (await sendMailFromServer(msg)).data as Mail;

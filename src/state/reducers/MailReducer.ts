@@ -34,15 +34,12 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
 
   switch (action.type) {
 
-    case ActionType.SET_SEND_TIMER:
-      
-      if(state.draft){
-      state.draft = {...state.draft , flag: true};
-      }
-      return
-
     case ActionType.SAVE_DRAFT:
-      state.draft = action.payload;
+      if(action.payload.raiseFlag !== undefined && state.draft) {
+        state.draft = {...state.draft , flag: action.payload.raiseFlag};
+      } else {
+        state.draft = action.payload.draft;
+      }
       return
       
     case ActionType.FETCH_INBOX:
@@ -146,7 +143,7 @@ const reducer = produce((state: MailState = initialState, action: Action) => {
     case ActionType.TOGGLE_ALL_MALI_CHECKBOX:
       if(state.checked.size || action.payload.reset){
         state.checked = new Set();
-      } else {
+      } else if(action.payload.mailList){
         state.checked = new Set(action.payload.mailList);
       }
       return

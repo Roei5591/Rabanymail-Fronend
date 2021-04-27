@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import { useActions } from '../hooks/use-actions';
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const SnackbarSending = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("prepare to send");
+
   
   const sending = useTypedSelector((state) => {
     return state.mail?.sending;
@@ -32,21 +31,19 @@ const SnackbarSending = () => {
    });
 
    
-   const {clearTimer} = useActions();
+   const {clearTimer , setDraft} = useActions();
 
    useEffect(() => {
     if(timer){
       setOpen(true);
-    }
-   if(sending){
-     setMessage("Sending...")
-   } else if(!timer) {
+    } else if(!sending){
      setOpen(false);
    }
    },[sending , timer])
 
   const handleClick = () => {
     clearTimer();
+    setDraft(null , true)
     setOpen(false);
   };
 
@@ -55,7 +52,7 @@ const SnackbarSending = () => {
   };
 
   const undoButton = 
-  (timer && <Button color="secondary" size="small" onClick={handleClick}>UNDO</Button>);
+  (timer  && <Button color="secondary" size="small" onClick={handleClick}>UNDO</Button>);
 
   return (
     <div className={classes.root}>  
@@ -65,8 +62,7 @@ const SnackbarSending = () => {
         vertical: 'bottom',
         horizontal: 'left',
       }}
-      
-      message = {message} 
+      message = "Sending"
       action={
         <React.Fragment>
           {undoButton}

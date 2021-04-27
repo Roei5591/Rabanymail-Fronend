@@ -10,15 +10,11 @@ const SearchBar = () => {
   const classes = useStyles();
   const [input , setInput] = useState("");
   
-  const handleChange = () => {
-
-  }
-
   const { setSearchTerm } = useActions();
 
   useEffect(() => {
     setSearchTerm(input);
-  },[input])
+  },[input , setSearchTerm])
 
 
   return  (

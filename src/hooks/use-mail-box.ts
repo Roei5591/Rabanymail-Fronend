@@ -1,7 +1,6 @@
 
 import { Mail } from '../state/Mail';
 import { useTypedSelector } from './use-typed-selector';
-import parse from 'html-react-parser';
 
 
 const filterMail = (mailList: Mail[] , filter : (mail: Mail) => boolean , searchTerm: string ) => {
